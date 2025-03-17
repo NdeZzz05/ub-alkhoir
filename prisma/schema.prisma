@@ -1,0 +1,217 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum RoleUser {
+  admin
+  customer
+}
+
+enum StatusOrder {
+  processed
+  shipped
+  completed
+  canceled
+}
+
+enum MethodPayment {
+  cod
+  cash
+  credit_card
+  e_wallet
+  bank_transfer
+}
+
+enum StatusPayment {
+  pending
+  paid
+  failed
+}
+
+model Category {
+  id    String @id @default(uuid())
+  name  String
+  image String
+
+  products Product[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  password     String
+  phone_number String
+  role         RoleUser @default(customer)
+
+  carts         Cart[]
+  orders        Order[]
+  notifications Notification[]
+  session       Session[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  expiresAt DateTime
+
+  user_id    String
+  user      User     @relation(references: [id], fields: [user_id], onDelete: Cascade)
+}
+
+model Product {
+  id          String @id @default(uuid())
+  name        String
+  image       String[]
+  price       Int
+  description String
+  stock       Int
+
+  category_id String
+  category    Category @relation(fields: [category_id], references: [id])
+
+  carts           Cart[]
+  order_product   OrderProduct[]
+  promos          Promo[]
+  sales_analytics SalesAnalytic[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Cart {
+  id       String @id @default(uuid())
+  quantity Int
+
+  user_id    String
+  user       User    @relation(fields: [user_id], references: [id])
+  product_id String
+  product    Product @relation(fields: [product_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Order {
+  id            String         @id @default(uuid())
+  code          String         @unique @db.VarChar(10) 
+  status        StatusOrder    
+  total         BigInt         @db.BigInt
+
+  user_id       String
+  user          User           @relation(fields: [user_id], references: [id])
+
+  order_detail  OrderDetail[]
+  order_product OrderProduct[]
+  payment       Payment?
+  notifications Notification[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model OrderDetail {
+  id       String @id @default(uuid())
+  name        String  @db.VarChar(255)
+  phone       String  @db.VarChar(255)
+  address     String  @db.VarChar(255)
+  notes       String? @db.VarChar(255)
+
+  order_id   String
+  order      Order   @relation(fields: [order_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model OrderProduct {
+  id         String @id @default(uuid())
+
+  subtotal   BigInt @db.BigInt
+  quantity   Int @db.Integer
+
+  product_id String
+  product    Product @relation(fields: [product_id], references: [id])
+  order_id   String
+  order      Order   @relation(fields: [order_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+
+model Payment {
+  id               String        @id @default(uuid())
+  transaction_date DateTime      @default(now())
+  status           StatusPayment @default(pending)
+  method           MethodPayment
+
+  order_id         String  @unique
+  order            Order   @relation(fields: [order_id], references: [id])
+  transaction_id   String? // Untuk menyimpan ID transaksi dari payment gateway jika pakai transfer
+  payment_provider String? // Nama payment gateway jika menggunakan metode transfer
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Promo {
+  id                  String   @id @default(uuid())
+  discount_percentage Int
+  start_date          DateTime
+  end_date            DateTime
+  image               String
+
+  product_id String
+  product    Product @relation(fields: [product_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model SalesAnalytic {
+  id            String   @id @default(uuid())
+  total_sales   Int
+  total_revenue Int
+  total_orders  Int
+  start_date    DateTime
+  end_date      DateTime
+
+  top_selling_product_id String
+  top_selling_product    Product @relation(fields: [top_selling_product_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Notification {
+  id      String   @id @default(uuid())
+  message String
+  sent_at DateTime @default(now())
+  link    String
+
+  user_id  String
+  user     User    @relation(fields: [user_id], references: [id])
+  order_id String?
+  order    Order?  @relation(fields: [order_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
