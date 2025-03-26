@@ -13,25 +13,22 @@ export async function storeProduct(_: unknown, formData: FormData): Promise<Acti
     description: formData.get("description"),
     category_id: formData.get("category_id"),
     stock: formData.get("stock"),
-    image: (formData.getAll("image") as File[]).slice(0, 3),
+    image: formData.get("image") as File,
   });
 
   if (!parse.success) {
     return { error: parse.error.errors[0].message };
   }
 
-  const uploaded_image = parse.data.image as File[];
-  const filenames = [];
-
-  for (const image of uploaded_image) {
-    const fileName = await uploadFile(image, "product");
-    filenames.push(fileName);
-  }
-
-  const cleanPrice = parse.data.price.replace(/\./g, "");
-  const cleanStock = parse.data.stock.replace(/\./g, "");
+  const uploadedImage = parse.data.image as File;
+  let filename = "";
 
   try {
+    filename = await uploadFile(uploadedImage, "product");
+
+    const cleanPrice = parse.data.price.replace(/\./g, "");
+    const cleanStock = parse.data.stock.replace(/\./g, "");
+
     await prisma.product.create({
       data: {
         name: parse.data.name,
@@ -39,24 +36,25 @@ export async function storeProduct(_: unknown, formData: FormData): Promise<Acti
         description: parse.data.description,
         category_id: parse.data.category_id,
         stock: Number.parseInt(cleanStock),
-        image: filenames,
+        image: filename,
       },
     });
   } catch (error) {
-    console.log(error);
+    console.error("Gagal membuat produk:", error);
     return { error: "Gagal membuat produk baru" };
   }
+
   return redirect("/dashboard/product");
 }
 
 export async function updateProduct(_: unknown, formData: FormData, id: string): Promise<ActionResult> {
-  console.log(id, "upp");
   const parse = schemaProductEdit.safeParse({
     name: formData.get("name"),
     price: formData.get("price"),
     description: formData.get("description"),
     category_id: formData.get("category_id"),
     stock: formData.get("stock"),
+    image: formData.get("image") as File,
     id: id,
   });
 
@@ -65,50 +63,42 @@ export async function updateProduct(_: unknown, formData: FormData, id: string):
   }
 
   const product = await prisma.product.findFirst({
-    where: {
-      id: id,
-    },
+    where: { id },
   });
 
   if (!product) {
     return { error: "Produk tidak ditemukan" };
   }
 
-  const uploaded_image = formData.getAll("image") as File[];
-  let filename = [];
+  let filename = product.image;
+  const uploadedImage = formData.get("image") as File;
 
-  if (uploaded_image.length === 3) {
-    const parseImage = schemaProduct.pick({ image: true }).safeParse({
-      image: uploaded_image,
-    });
-
-    if (!parseImage.success) {
-      return { error: "Gagal dalam unggah gambar" };
+  if (uploadedImage) {
+    try {
+      filename = await uploadFile(uploadedImage, "product");
+    } catch (error) {
+      console.error("Gagal mengunggah gambar:", error);
+      return { error: "Gagal mengunggah gambar" };
     }
-
-    for (const image of uploaded_image) {
-      const fileName = await uploadFile(image, "product");
-      filename.push(fileName);
-    }
-  } else {
-    filename = product.image;
   }
 
   try {
+    const cleanPrice = parse.data.price.replace(/\./g, "");
+    const cleanStock = parse.data.stock.replace(/\./g, "");
+
     await prisma.product.update({
       where: { id },
       data: {
         name: parse.data.name,
-        price: Number.parseInt(parse.data.price.replace(/\./g, "")),
+        price: Number.parseInt(cleanPrice),
         description: parse.data.description,
         category_id: parse.data.category_id,
-        stock: Number.parseInt(parse.data.stock.replace(/\./g, "")),
+        stock: Number.parseInt(cleanStock),
         image: filename,
       },
     });
   } catch (error) {
-    console.log(error);
-
+    console.error("Gagal mengubah produk:", error);
     return { error: "Gagal mengubah produk" };
   }
 
@@ -135,7 +125,7 @@ export async function deleteProduct(_: unknown, formData: FormData, id: string):
     });
   } catch (error) {
     console.error(error);
-    return { error: "Gagal menghapus kategori" };
+    return { error: "Gagal menghapus produk" };
   }
   return redirect("/dashboard/product");
 }

@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import "../../globals.css";
-import { getUser } from "@/lib/auth";
-import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Homepages",
@@ -13,15 +11,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { session } = await getUser();
-
-  if (!session) {
-    return redirect("/login");
-  }
-
   return (
-    <div className="flex justify-center items-center bg-gray-200">
-      <div className="w-[465px] h-screen border bg-red-400">{children}</div>
-    </div>
+    <>
+      <div className="flex justify-center items-center">
+        <div className="max-w-sm">{children}</div>
+      </div>
+    </>
   );
 }

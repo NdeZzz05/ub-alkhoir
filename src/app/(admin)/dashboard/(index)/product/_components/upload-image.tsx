@@ -5,16 +5,16 @@ import Image from "next/image";
 import React, { ChangeEvent, useRef, useState, useEffect } from "react";
 
 interface UploadImageProps {
-  data?: string[];
+  data?: string;
 }
 
-export default function UploadImage({ data = [] }: UploadImageProps) {
+export default function UploadImage({ data = "" }: UploadImageProps) {
   const ref = useRef<HTMLInputElement>(null);
-  const [images, setImages] = useState<string[]>([]);
+  const [image, setImage] = useState<string>("");
 
   useEffect(() => {
-    if (data.length > 0) {
-      setImages(data.slice(0, 3).map((img) => getImageUrl(img, "product")));
+    if (data) {
+      setImage(getImageUrl(data, "product"));
     }
   }, [data]);
 
@@ -23,34 +23,27 @@ export default function UploadImage({ data = [] }: UploadImageProps) {
   };
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
+    if (!e.target.files || e.target.files.length === 0) return;
 
-    const selectedFiles = Array.from(e.target.files);
+    const file = e.target.files[0];
 
-    const validFiles = selectedFiles.filter((file) => ["image/png", "image/jpeg", "image/jpg"].includes(file.type));
-
-    const limitedFiles = validFiles.slice(0, 3);
-
-    const newImages = limitedFiles.map((file) => URL.createObjectURL(file));
-
-    setImages(newImages);
+    if (["image/png", "image/jpeg", "image/jpg"].includes(file.type)) {
+      setImage(URL.createObjectURL(file));
+    }
   };
 
   return (
     <div className="flex flex-col space-y-1.5">
       <Label htmlFor="image">Gambar Produk</Label>
       <div className="grid gap-2 border rounded-md p-2">
-        <Image alt="Gambar Produk" className="aspect-square w-full rounded-md object-cover border" height={300} width={300} src={images[0] || "/placeholder.svg"} />
-        <div className="grid grid-cols-3 gap-2">
-          {images.slice(1, 3).map((src, index) => (
-            <Image key={index} alt={`Gambar Produk ${index + 1}`} className="aspect-square w-full rounded-md border object-cover" height={84} width={84} src={src || "/placeholder.svg"} />
-          ))}
-          <button type="button" onClick={openFolder} className="flex aspect-square w-full items-center justify-center rounded-md border border-dashed">
-            <Upload className="h-4 w-4 text-muted-foreground" />
-            <span className="sr-only">Upload</span>
-          </button>
-          <input ref={ref} onChange={onChange} type="file" name="image" className="hidden" accept="image/png, image/jpeg, image/jpg" multiple />
-        </div>
+        <Image alt="Gambar Produk" onClick={openFolder} className="aspect-square w-full rounded-md object-cover border" height={300} width={300} src={image || "/placeholder.svg"} />
+
+        <button type="button" onClick={openFolder} className="flex gap-1 w-full p-4 items-center justify-center rounded-md border border-dashed">
+          <Upload className="h-4 w-4 text-muted-foreground" />
+          <span className="text-xs">Pilih Gambar</span>
+        </button>
+
+        <input ref={ref} onChange={onChange} type="file" name="image" className="hidden" accept="image/png, image/jpeg, image/jpg" />
       </div>
     </div>
   );

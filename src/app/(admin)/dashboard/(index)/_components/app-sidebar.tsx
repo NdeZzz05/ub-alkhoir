@@ -66,7 +66,7 @@ const data = {
   ],
   navLogout: {
     title: "Logout",
-    url: "#",
+    url: "/login",
     emoji: "🏃",
   },
 };

@@ -50,21 +50,12 @@ export const schemaProduct = z.object({
   category_id: z.string({ required_error: "Kategori wajib dipilih" }),
   image: z
     .any()
-    .refine((files: File[]) => files.length === 3, {
-      message: "Minimal 3 Gambar wajib diupload",
+    .refine((file: File) => file instanceof File, {
+      message: "Gambar wajib diupload",
     })
-    .refine(
-      (files: File[]) => {
-        let validate = false;
-
-        Array.from(files).find((file) => (validate = ALLOW_MIME_TYPES.includes(file.type)));
-
-        return validate;
-      },
-      {
-        message: "File gambar harus berformat PNG, JPEG, atau JPG",
-      }
-    ),
+    .refine((file: File) => ALLOW_MIME_TYPES.includes(file.type), {
+      message: "File gambar harus berformat PNG, JPEG, atau JPG",
+    }),
 });
 
 export const schemaProductEdit = schemaProduct

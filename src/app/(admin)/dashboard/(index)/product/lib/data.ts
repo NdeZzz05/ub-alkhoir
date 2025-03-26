@@ -25,7 +25,7 @@ export async function getProduct() {
       return {
         id: item.id,
         name: item.name,
-        image: item.image[0],
+        image: item.image,
         price: Number(item.price),
         description: item.description,
         stock: Number(item.stock),

@@ -19,7 +19,7 @@ export function FormLogout({
     emoji: string;
   };
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
-  const [state, formAction] = useActionState(Logout, initialState);
+  const [, formAction] = useActionState(Logout, initialState);
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent>

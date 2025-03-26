@@ -8,7 +8,7 @@ import { getCategory } from "../../../category/lib/data";
 import { getProductById } from "../../lib/data";
 
 export default async function EditPage({ params }: Tedit) {
-  const { id } = await params;
+  const { id } = await Promise.resolve(params);
   const productById = await getProductById(id);
   const category = await getCategory();
 

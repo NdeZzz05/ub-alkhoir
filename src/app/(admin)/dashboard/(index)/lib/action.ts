@@ -5,7 +5,7 @@ import { ActionResult } from "@/types";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export async function Logout(_: unknown, formData: FormData): Promise<ActionResult> {
+export async function Logout(): Promise<ActionResult> {
   const { session } = await getUser();
 
   if (!session) {
@@ -21,5 +21,5 @@ export async function Logout(_: unknown, formData: FormData): Promise<ActionResu
   const cookieStore = await cookies();
   cookieStore.set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
 
-  return redirect("/dashboard/login");
+  return redirect("/login");
 }

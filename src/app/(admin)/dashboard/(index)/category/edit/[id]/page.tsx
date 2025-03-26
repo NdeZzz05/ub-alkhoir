@@ -5,7 +5,7 @@ import { getCategoryById } from "../../lib/data";
 import FormCategory from "../../_components/form-category";
 
 export default async function EditPage({ params }: Tedit) {
-  const { id } = await params;
+  const { id } = params;
   const category = await getCategoryById(id);
 
   if (!category) {
