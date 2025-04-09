@@ -3,12 +3,10 @@ import ListCategory from "./_components/list-category";
 import PromoCarousel from "./_components/promo-carousel";
 import ListProduct from "./_components/list-product";
 import { SearchForm } from "./_components/search-form";
-import Navbar from "./_components/navbar";
 
 export default function Page() {
   return (
     <>
-      <Navbar />
       <SearchForm />
       <header>
         <PromoCarousel />

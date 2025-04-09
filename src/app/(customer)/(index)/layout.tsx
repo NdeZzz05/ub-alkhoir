@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "../../globals.css";
+import Navbar from "./_components/navbar";
 
 export const metadata: Metadata = {
   title: "Homepages",
@@ -12,10 +13,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
-      <div className="flex justify-center items-center">
-        <div className="max-w-sm">{children}</div>
+    <div className="flex justify-center items-center">
+      <div className="flex flex-col justify-center items-start w-full max-w-sm">
+        <Navbar />
+        {children}
       </div>
-    </>
+    </div>
   );
 }
