@@ -10,7 +10,7 @@ interface CardProductProps {
 }
 export default function CardProduct({ item }: CardProductProps) {
   return (
-    <Link key={`${item.name + item.id}`} href="#">
+    <Link key={`${item.name + item.id}`} href={`/detail-product/${item.id}`}>
       <div className="bg-white flex flex-col rounded-md ring-1 ring-[#E5E5E5]">
         <div className="w-full flex items-center justify-center overflow-hidden">
           <Image src={item.image_url} alt={item.name} loading="lazy" className="aspect-[1/1] h-fit w-fit object-cover rounded-t-md" width={300} height={400} />

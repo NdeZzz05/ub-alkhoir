@@ -6,6 +6,10 @@ export type Tparams = {
   id: string;
 };
 
+export type TDetailProduct = {
+  params: Tparams;
+};
+
 export type Tedit = {
   params: Tparams;
 };
