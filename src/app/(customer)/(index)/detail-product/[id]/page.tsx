@@ -5,8 +5,7 @@ import { getProductById } from "../lib/data";
 import { redirect } from "next/navigation";
 import BackButton from "../_components/back-button";
 import { rupiahFormat } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { ShoppingBasket } from "lucide-react";
+import ButtonAddCart from "../../_components/button-add-cart";
 
 export default async function DetailProductPage({ params }: TDetailProduct) {
   const { id } = await Promise.resolve(params);
@@ -24,17 +23,23 @@ export default async function DetailProductPage({ params }: TDetailProduct) {
         <Image src={product.image_url} alt={product.name} loading="lazy" className="aspect-[1/1] h-fit w-full object-cover rounded-t-md border" width={500} height={500} />
         <div className="flex justify-between items-center py-2">
           <p className="font-bold text-2xl text-primary">{rupiahFormat(Number(product.price))}</p>
-          <p className="text-base">{product._count.order_product} Terjual</p>
+          <p className="text-sm">{product._count.order_product} Terjual</p>
         </div>
         <div className="py-2">
-          <p className="font-bold text-xl">{product.name}</p>
+          <h2 className="font-bold text-xl">{product.name}</h2>
         </div>
         <hr className="border-gray-100" />
         <div className="py-2 flex justify-end">
-          <Button variant={"default"} className="">
-            <ShoppingBasket />
-            Keranjang
-          </Button>
+          <ButtonAddCart
+            item={{
+              id: product.id,
+              name: product.name,
+              price: product.price,
+              image_url: product.image_url,
+              category: product.category,
+            }}
+            className=""
+          />
         </div>
         <hr className="border-gray-100" />
         <div className="py-2 pb-14">

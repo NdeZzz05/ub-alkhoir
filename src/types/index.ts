@@ -23,3 +23,5 @@ export type Tproduct = {
     name: string;
   };
 };
+
+export type Tcart = Tproduct & { quantity: number };

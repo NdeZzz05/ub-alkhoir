@@ -14,7 +14,7 @@ export default async function ListCategory() {
       <ScrollArea>
         <div className="flex gap-4 p-1">
           {categories.map((item) => (
-            <Link key={`${item.name + item.id}`} href="#" className="categories-card">
+            <Link key={`${item.name + item.id}`} href={`/catalog?category=${item.id}`} className="categories-card">
               <div className="bg-white flex flex-col items-center space-y-2 rounded-md ring-1 ring-[#E5E5E5] w-20">
                 <div className="w-12 h-12 flex items-center justify-center overflow-hidden">
                   <Image src={item.image_url} alt={`kategori + ${item.name}`} loading="lazy" className="aspect-[1/1] h-fit w-fit object-cover" width={300} height={400} />

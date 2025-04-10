@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import { SearchForm } from "../_components/search-form";
 import { ListFilter } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-// import FilterPrice from "./_components/filter-price";
 import FilterSort from "./_components/filter-sort";
 import FilterCategory from "./_components/filter-category";
 import ListProduct from "./_components/list-product";
@@ -23,8 +22,6 @@ export default function CatalogPage() {
               <DialogHeader>
                 <DialogTitle>Filter</DialogTitle>
                 <DialogDescription>Pilih filter sesuai keinginan mu.</DialogDescription>
-                {/* <hr className="border-gray-200" /> */}
-                {/* <FilterPrice /> */}
                 <hr className="border-gray-200" />
                 <FilterSort />
                 <hr className="border-gray-200" />
