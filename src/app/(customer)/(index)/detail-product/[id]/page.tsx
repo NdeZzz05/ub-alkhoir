@@ -3,9 +3,9 @@ import Image from "next/image";
 import React from "react";
 import { getProductById } from "../lib/data";
 import { redirect } from "next/navigation";
-import BackButton from "../_components/back-button";
 import { rupiahFormat } from "@/lib/utils";
 import ButtonAddCart from "../../_components/button-add-cart";
+import BackButton from "../../_components/back-button";
 
 export default async function DetailProductPage({ params }: TDetailProduct) {
   const { id } = await Promise.resolve(params);

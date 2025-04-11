@@ -26,7 +26,7 @@ const data = [
   },
   {
     title: "Akun",
-    url: "/accounts",
+    url: "/account",
     emoji: "🙍‍♂️",
   },
 ];
