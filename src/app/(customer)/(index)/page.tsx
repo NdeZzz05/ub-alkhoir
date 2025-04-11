@@ -11,10 +11,12 @@ export default function Page() {
       <header>
         <PromoCarousel />
       </header>
-      <section id="content">
+      <section id="content-category">
         <Suspense fallback={<span>Loading...</span>}>
           <ListCategory />
         </Suspense>
+      </section>
+      <section id="content-product">
         <Suspense fallback={<span>Loading...</span>}>
           <ListProduct />
         </Suspense>
