@@ -5,7 +5,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage, BreadcrumbS
 import Link from "next/link";
 
 interface HeaderProps {
-  page?: "Kategori" | "Promo" | "Produk" | "Pesanan" | "Pelanggan" | null;
+  page?: "Kategori" | "Promo" | "Produk" | "Pesanan" | "Pelanggan" | "Kavling" | null;
 }
 export const Header: React.FC<HeaderProps> = ({ page }) => {
   return (

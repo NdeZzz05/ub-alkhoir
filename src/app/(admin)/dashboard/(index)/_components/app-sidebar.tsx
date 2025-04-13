@@ -50,6 +50,11 @@ const data = {
           url: "/dashboard/customer",
           emoji: "🙍‍♂️",
         },
+        {
+          title: "Data Kavling",
+          url: "/dashboard/plot",
+          emoji: "🗺️",
+        },
       ],
     },
     {

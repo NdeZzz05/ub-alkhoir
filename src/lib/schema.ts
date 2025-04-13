@@ -20,6 +20,10 @@ export const schemaCategory = z.object({
     .refine((file: File) => file?.name, { message: "Gambar wajib diisi" }),
 });
 
+export const schemaPlot = z.object({
+  name: z.string({ required_error: "Nama kavling beserta blok wajib diisi" }).min(4, { message: "Minimal 4 Karakter" }),
+});
+
 // export const schemaProduct = z.object({
 //   name: z.string({ required_error: "Nama produk wajib diisi" }).min(4, { message: "Minimal 4 Karakter" }),
 //   description: z.string({ required_error: "Deskripsi wajib diisi" }).min(4, { message: "Minimal 4 Karakter" }),

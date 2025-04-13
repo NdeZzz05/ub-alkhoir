@@ -1,20 +1,20 @@
 import { Tedit } from "@/types";
 import { Header } from "../../../_components/header";
 import { redirect } from "next/navigation";
-import { getCategoryById } from "../../lib/data";
-import FormCategory from "../../_components/form-category";
+import { getPlotById } from "../../lib/data";
+import FormPlot from "../../_components/form-plot";
 
 export default async function EditPage({ params }: Tedit) {
   const { id } = await Promise.resolve(params);
-  const category = await getCategoryById(id);
+  const plot = await getPlotById(id);
 
-  if (!category) {
-    return redirect("/dashboard/category");
+  if (!plot) {
+    return redirect("/dashboard/plot");
   }
   return (
     <>
       <Header page={"Kategori"} />
-      <FormCategory type="EDIT" data={category} />
+      <FormPlot type="EDIT" data={plot} />
     </>
   );
 }
