@@ -1,4 +1,4 @@
-import { Tedit } from "@/types";
+import { TEdit } from "@/types";
 import { Header } from "../../../_components/header";
 import { redirect } from "next/navigation";
 import FormProduct from "../../_components/form-product";
@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { getCategory } from "../../../category/lib/data";
 import { getProductById } from "../../lib/data";
 
-export default async function EditPage({ params }: Tedit) {
+export default async function EditPage({ params }: TEdit) {
   const { id } = await Promise.resolve(params);
   const productById = await getProductById(id);
   const category = await getCategory();

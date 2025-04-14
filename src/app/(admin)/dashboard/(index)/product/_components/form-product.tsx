@@ -40,7 +40,6 @@ export default function FormProduct({ children, type, data }: FormProductProps) 
     if (state.error) {
       pushAlert(state.error, "danger");
     }
-    console.log(state.error);
   }, [state]);
   return (
     <>

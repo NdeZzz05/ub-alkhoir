@@ -1,8 +1,8 @@
 import { TFilter } from "@/hooks/useFilter";
 import { Prisma } from "@prisma/client";
 import prisma from "../../../../lib/prisma";
-import { Tproduct } from "@/types";
 import { getImageUrl } from "@/lib/supabase";
+import { TProduct } from "@/types";
 
 export async function POST(request: Request) {
   try {
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
       },
     });
 
-    const response: Tproduct[] = product.map((product) => {
+    const response: TProduct[] = product.map((product) => {
       return {
         id: product.id,
         name: product.name,

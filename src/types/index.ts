@@ -2,19 +2,19 @@ export type ActionResult = {
   error: string;
 };
 
-export type Tparams = {
+export type TParams = {
   id: string;
 };
 
 export type TDetailProduct = {
-  params: Tparams;
+  params: Promise<{ id: string }>;
 };
 
-export type Tedit = {
-  params: Tparams;
+export type TEdit = {
+  params: Promise<{ id: string }>;
 };
 
-export type Tproduct = {
+export type TProduct = {
   id: string;
   name: string;
   price: number;
@@ -24,4 +24,4 @@ export type Tproduct = {
   };
 };
 
-export type Tcart = Tproduct & { quantity: number };
+export type TCart = TProduct & { quantity: number };

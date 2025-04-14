@@ -3,12 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/hooks/useCart";
 import { pushAlert } from "@/lib/client";
-import { Tcart, Tproduct } from "@/types";
+import { TCart, TProduct } from "@/types";
 import { ShoppingBasket } from "lucide-react";
 import React from "react";
 
 interface ButtonAddCartProps {
-  item: Tproduct;
+  item: TProduct;
   className?: string;
 }
 export default function ButtonAddCart({ item, className }: ButtonAddCartProps) {
@@ -20,7 +20,7 @@ export default function ButtonAddCart({ item, className }: ButtonAddCartProps) {
     if (existingProduct) {
       increaseQuantity(item.id);
     } else {
-      const newCart: Tcart = {
+      const newCart: TCart = {
         ...item,
         quantity: 1,
       };

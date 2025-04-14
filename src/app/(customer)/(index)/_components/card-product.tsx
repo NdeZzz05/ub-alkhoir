@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { rupiahFormat } from "@/lib/utils";
-import { Tproduct } from "@/types";
 import ButtonAddCart from "./button-add-cart";
+import { TProduct } from "@/types";
 interface CardProductProps {
-  item: Tproduct;
+  item: TProduct;
 }
 export default function CardProduct({ item }: CardProductProps) {
   return (

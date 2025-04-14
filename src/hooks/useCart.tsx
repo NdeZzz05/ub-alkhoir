@@ -1,10 +1,10 @@
-import { Tcart } from "@/types";
+import { TCart } from "@/types";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 interface CartState {
-  products: Tcart[];
-  addProduct: (cart: Tcart) => void;
+  products: TCart[];
+  addProduct: (cart: TCart) => void;
   increaseQuantity: (id: string) => void;
   decreaseQuantity: (id: string) => void;
   removeProduct: (id: string) => void;

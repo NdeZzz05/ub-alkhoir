@@ -22,7 +22,7 @@ export default function ListProduct() {
     if (categoryFromUrl) {
       setFilter({ category: [categoryFromUrl] });
     }
-  }, [categoryFromUrl]);
+  }, [categoryFromUrl, setFilter]);
 
   if (isLoading) return <div>Loading...</div>;
 
