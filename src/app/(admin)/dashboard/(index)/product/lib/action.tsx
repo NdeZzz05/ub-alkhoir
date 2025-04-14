@@ -48,6 +48,8 @@ export async function storeProduct(_: unknown, formData: FormData): Promise<Acti
 }
 
 export async function updateProduct(_: unknown, formData: FormData, id: string): Promise<ActionResult> {
+  const fileUpload = formData.get("image") as File;
+
   const parse = schemaProductEdit.safeParse({
     name: formData.get("name"),
     price: formData.get("price"),
@@ -64,22 +66,17 @@ export async function updateProduct(_: unknown, formData: FormData, id: string):
 
   const product = await prisma.product.findFirst({
     where: { id },
+    select: { image: true },
   });
 
   if (!product) {
     return { error: "Produk tidak ditemukan" };
   }
 
-  let filename = product.image;
-  const uploadedImage = formData.get("image") as File;
+  let filename = product?.image;
 
-  if (uploadedImage) {
-    try {
-      filename = await uploadFile(uploadedImage, "product");
-    } catch (error) {
-      console.error("Gagal mengunggah gambar:", error);
-      return { error: "Gagal mengunggah gambar" };
-    }
+  if (fileUpload.size > 0) {
+    filename = await uploadFile(fileUpload, "product");
   }
 
   try {

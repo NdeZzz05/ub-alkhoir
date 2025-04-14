@@ -24,27 +24,14 @@ export const schemaPlot = z.object({
   name: z.string({ required_error: "Nama kavling beserta blok wajib diisi" }).min(4, { message: "Minimal 4 Karakter" }),
 });
 
-// export const schemaProduct = z.object({
-//   name: z.string({ required_error: "Nama produk wajib diisi" }).min(4, { message: "Minimal 4 Karakter" }),
-//   description: z.string({ required_error: "Deskripsi wajib diisi" }).min(4, { message: "Minimal 4 Karakter" }),
-//   price: z.string({ required_error: "Harga wajib diisi" }),
-//   stock: z.string({ required_error: "Stok wajib diisi" }),
-//   category_id: z.string({ required_error: "Kategori wajib dipilih" }),
-//   image: z
-//     .any()
-//     .refine((files) => Array.isArray(files) && files.length >= 3, {
-//       message: "Minimal 3 gambar wajib diupload",
-//     })
-//     .refine(
-//       (files) => {
-//         if (!Array.isArray(files)) return false; // Cegah error jika undefined
-//         return files.every((file) => ALLOW_MIME_TYPES.includes(file.type)); // Cek semua file valid
-//       },
-//       {
-//         message: "File gambar harus berformat PNG, JPEG, atau JPG",
-//       }
-//     ),
-// });
+export const schemaPromo = z.object({
+  discount_percentage: z.number({ required_error: "Persentase diskon wajib diisi" }).min(1, { message: "Minimal diskon 1%" }).max(100, { message: "Maksimal diskon 100%" }),
+  image: z
+    .any()
+    .refine((file: File) => ALLOW_MIME_TYPES.includes(file.type), { message: "File tidak valid" })
+    .refine((file: File) => file?.name, { message: "Gambar wajib diisi" }),
+  products: z.array(z.string(), { required_error: "Minimal pilih 1 produk untuk promo ini" }).min(1, { message: "Pilih minimal 1 produk" }),
+});
 
 export const schemaProduct = z.object({
   name: z.string({ required_error: "Nama produk wajib diisi" }).min(4, { message: "Nama minimal 4 karakter" }),
@@ -54,16 +41,14 @@ export const schemaProduct = z.object({
   category_id: z.string({ required_error: "Kategori wajib dipilih" }),
   image: z
     .any()
-    .refine((file: File) => file instanceof File, {
-      message: "Gambar wajib diupload",
-    })
-    .refine((file: File) => ALLOW_MIME_TYPES.includes(file.type), {
-      message: "File gambar harus berformat PNG, JPEG, atau JPG",
-    }),
+    .refine((file: File) => ALLOW_MIME_TYPES.includes(file.type), { message: "File tidak valid" })
+    .refine((file: File) => file?.name, { message: "Gambar wajib diisi" }),
 });
 
-export const schemaProductEdit = schemaProduct
-  .extend({
-    id: z.string({ required_error: "ID Produk wajib diperlukan" }),
-  })
-  .omit({ image: true });
+export const schemaProductEdit = z.object({
+  name: z.string({ required_error: "Nama produk wajib diisi" }).min(4, { message: "Nama minimal 4 karakter" }),
+  description: z.string({ required_error: "Deskripsi wajib diisi" }).min(4, { message: "Deskripsi minimal 4 karakter" }),
+  price: z.string({ required_error: "Harga wajib diisi" }),
+  stock: z.string({ required_error: "Stok wajib diisi" }),
+  category_id: z.string({ required_error: "Kategori wajib dipilih" }),
+});

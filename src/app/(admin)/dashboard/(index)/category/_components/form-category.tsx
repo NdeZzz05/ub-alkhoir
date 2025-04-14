@@ -11,6 +11,7 @@ import { ActionResult } from "@/types";
 import { Category } from "@prisma/client";
 import Link from "next/link";
 import { pushAlert } from "@/lib/client";
+import UploadImage from "./upload-image";
 
 const initialState: ActionResult = {
   error: "",
@@ -54,8 +55,7 @@ export default function FormCategory({ data, type }: FormCategoryProps) {
                     <Input id="name" name="name" type="text" placeholder="nama kategori" defaultValue={data?.name} />
                   </div>
                   <div className="flex flex-col space-y-1.5">
-                    <Label htmlFor="image">Gambar Kategori</Label>
-                    <Input id="image" name="image" type="file" placeholder="gambar kategori" />
+                    <UploadImage data={data?.image} />
                   </div>
                 </div>
               </CardContent>

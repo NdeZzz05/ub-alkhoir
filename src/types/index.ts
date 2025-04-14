@@ -25,3 +25,16 @@ export type TProduct = {
 };
 
 export type TCart = TProduct & { quantity: number };
+
+export interface PromoWithProducts {
+  id: string;
+  discount_percentage: number;
+  image: string;
+  created_at: Date;
+  updated_at: Date;
+  products: {
+    id: string;
+    name: string;
+    image: string;
+  }[];
+}

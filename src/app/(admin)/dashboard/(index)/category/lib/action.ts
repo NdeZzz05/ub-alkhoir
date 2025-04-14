@@ -33,8 +33,6 @@ export async function postCategory(_: unknown, formData: FormData): Promise<Acti
 }
 
 export async function updateCategory(_: unknown, formData: FormData, id: string): Promise<ActionResult> {
-  console.log(formData.get("name"));
-
   const fileUpload = formData.get("image") as File;
 
   const validate = schemaCategory.pick({ name: true }).safeParse({

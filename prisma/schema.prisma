@@ -86,10 +86,11 @@ model Product {
 
   category_id String
   category    Category @relation(fields: [category_id], references: [id])
+  promo_id    String?    // Nullable, karena nggak semua produk pasti diskon
+  promo       Promo? @relation(fields: [promo_id], references: [id])
 
   carts           Cart[]
   order_product   OrderProduct[]
-  promos          Promo[]
   sales_analytics SalesAnalytic[]
 
   created_at DateTime @default(now())
@@ -186,12 +187,9 @@ model Payment {
 model Promo {
   id                  String   @id @default(uuid())
   discount_percentage Int
-  start_date          DateTime
-  end_date            DateTime
   image               String
 
-  product_id String
-  product    Product @relation(fields: [product_id], references: [id])
+  products            Product[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
