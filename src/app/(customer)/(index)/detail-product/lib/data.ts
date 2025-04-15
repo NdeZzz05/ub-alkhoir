@@ -24,6 +24,11 @@ export async function getProductById(id: string) {
             name: true,
           },
         },
+        promo: {
+          select: {
+            discount_percentage: true,
+          },
+        },
       },
     });
 
@@ -31,9 +36,15 @@ export async function getProductById(id: string) {
       return redirect("/");
     }
 
+    const discount = product.promo?.discount_percentage ?? 0;
+    const discounted_price = Math.floor(product.price - (product.price * discount) / 100);
+
     return {
       ...product,
       image_url: getImageUrl(product.image, "product"),
+      price: discounted_price,
+      original_price: Number(product.price),
+      discount_percentage: discount,
     };
   } catch (error) {
     console.log(error);

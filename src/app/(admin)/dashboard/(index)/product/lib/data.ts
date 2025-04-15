@@ -18,18 +18,28 @@ export async function getProduct() {
             name: true,
           },
         },
+        promo: {
+          select: {
+            discount_percentage: true,
+          },
+        },
       },
     });
 
     const response_product: TColumn[] = products.map((item) => {
+      const discount = item.promo?.discount_percentage ?? 0;
+      const discounted_price = Math.floor(item.price - (item.price * discount) / 100);
+
       return {
         id: item.id,
         name: item.name,
         image: item.image,
-        price: Number(item.price),
+        price: discounted_price,
         description: item.description,
         stock: Number(item.stock),
         category_name: item.category.name,
+        original_price: Number(item.price),
+        discount_percentage: discount,
       };
     });
     return response_product;

@@ -34,13 +34,16 @@ export async function POST(request: Request) {
       });
     }
 
-    const orderBy: Prisma.ProductOrderByWithRelationInput = res.sortBy === "priceLowest" ? { price: "asc" } : res.sortBy === "priceHighest" ? { price: "desc" } : {};
+    if (res.promo && res.promo !== "") {
+      ORQuery.push({
+        promo_id: res.promo,
+      });
+    }
 
     const product = await prisma.product.findMany({
       where: {
         OR: ORQuery.length > 0 ? ORQuery : undefined,
       },
-      orderBy,
       select: {
         id: true,
         name: true,
@@ -51,18 +54,33 @@ export async function POST(request: Request) {
             name: true,
           },
         },
+        promo: {
+          select: {
+            discount_percentage: true,
+          },
+        },
       },
     });
 
     const response: TProduct[] = product.map((product) => {
+      const discount = product.promo?.discount_percentage ?? 0;
+      const discounted_price = Math.floor(product.price - (product.price * discount) / 100);
       return {
         id: product.id,
         name: product.name,
-        price: product.price,
+        price: discounted_price,
         image_url: getImageUrl(product.image, "product"),
         category: product.category,
+        original_price: Number(product.price),
+        discount_percentage: discount,
       };
     });
+
+    if (res.sortBy === "priceLowest") {
+      response.sort((a, b) => a.price - b.price);
+    } else if (res.sortBy === "priceHighest") {
+      response.sort((a, b) => b.price - a.price);
+    }
 
     return Response.json(response);
   } catch (error) {

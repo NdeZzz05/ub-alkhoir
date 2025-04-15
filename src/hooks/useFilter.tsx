@@ -8,6 +8,7 @@ export type TFilter = {
   maxPrice?: number;
   sortBy?: SortBy | null;
   category?: string[] | null;
+  promo?: string | null;
 };
 
 export interface FilterState {
@@ -22,6 +23,7 @@ export const useFilter = create<FilterState>()((set) => ({
     maxPrice: 0,
     sortBy: null,
     category: null,
+    promo: null,
   },
   setFilter: (filter) =>
     set((state) => ({

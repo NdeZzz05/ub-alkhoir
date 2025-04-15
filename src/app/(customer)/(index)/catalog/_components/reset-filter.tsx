@@ -15,6 +15,7 @@ export default function ResetFilter() {
       maxPrice: 0,
       sortBy: null,
       category: null,
+      promo: null,
     });
     router.push("/catalog");
   };

@@ -16,7 +16,14 @@ export default function CheckoutProduct() {
             <div className="p-2 flex flex-col justify-between h-full">
               <p className="font-medium text-sm truncate">{item.name}</p>
               <div className="flex justify-between items-center">
-                <p className="font-bold text-base text-primary pb-1">{rupiahFormat(item.price)}</p>
+                {item.discount_percentage && item.discount_percentage > 0 ? (
+                  <div className="flex items-center gap-2">
+                    <div className="text-red-600 font-bold text-base">{rupiahFormat(item.price)}</div>
+                    <div className="line-through text-sm text-muted-foreground">{rupiahFormat(item.original_price!)}</div>
+                  </div>
+                ) : (
+                  <div className="font-bold text-base text-primary">{rupiahFormat(item.price)}</div>
+                )}
                 <p className="font-normal text-center text-sm">{item.quantity} Pcs</p>
               </div>
             </div>

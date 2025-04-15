@@ -22,6 +22,8 @@ export type TProduct = {
   category: {
     name: string;
   };
+  original_price?: number;
+  discount_percentage?: number;
 };
 
 export type TCart = TProduct & { quantity: number };

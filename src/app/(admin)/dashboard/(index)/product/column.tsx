@@ -20,6 +20,8 @@ export type TColumn = {
   description: string;
   stock: number;
   category_name: string;
+  original_price?: number;
+  discount_percentage?: number;
 };
 
 export const columns: ColumnDef<TColumn>[] = [
@@ -44,7 +46,26 @@ export const columns: ColumnDef<TColumn>[] = [
     header: "Harga",
     cell: ({ row }) => {
       const product = row.original;
-      return rupiahFormat(product.price);
+      return (
+        <div>
+          {product.discount_percentage && product.discount_percentage > 0 ? (
+            <div>
+              <div className="text-red-600 font-semibold">{rupiahFormat(product.price)}</div>
+              <div className="line-through text-sm text-muted-foreground">{rupiahFormat(product.original_price!)}</div>
+            </div>
+          ) : (
+            <div>{rupiahFormat(product.price)}</div>
+          )}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "discount_percentage",
+    header: "Diskon",
+    cell: ({ row }) => {
+      const product = row.original;
+      return <p>{product.discount_percentage}%</p>;
     },
   },
   {

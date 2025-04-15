@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchProduct } from "../lib/data";
 import CardProduct from "../../_components/card-product";
-import { useFilter } from "@/hooks/useFilter";
+import { TFilter, useFilter } from "@/hooks/useFilter";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
@@ -11,6 +11,7 @@ export default function ListProduct() {
   const { filter } = useFilter();
   const searchParams = useSearchParams();
   const categoryFromUrl = searchParams.get("category");
+  const promoFromUrl = searchParams.get("promo");
   const { setFilter } = useFilter();
 
   const { data, isLoading } = useQuery({
@@ -19,10 +20,15 @@ export default function ListProduct() {
   });
 
   useEffect(() => {
-    if (categoryFromUrl) {
-      setFilter({ category: [categoryFromUrl] });
+    const newFilter: Partial<TFilter> = {};
+
+    if (categoryFromUrl) newFilter.category = [categoryFromUrl];
+    if (promoFromUrl) newFilter.promo = promoFromUrl;
+
+    if (Object.keys(newFilter).length > 0) {
+      setFilter(newFilter);
     }
-  }, [categoryFromUrl, setFilter]);
+  }, [categoryFromUrl, setFilter, promoFromUrl]);
 
   if (isLoading) return <div>Loading...</div>;
 

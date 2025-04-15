@@ -9,6 +9,8 @@ import React from "react";
 
 export default function CartProduct() {
   const { products, decreaseQuantity, increaseQuantity, removeProduct } = useCart();
+  console.log(products, "prod");
+
   return (
     <>
       {products.map((item) => (
@@ -17,7 +19,14 @@ export default function CartProduct() {
           <div className="w-full">
             <div className="p-2">
               <p className="font-medium text-base truncate">{item.name}</p>
-              <p className="font-bold text-base text-primary pb-1">{rupiahFormat(item.price)}</p>
+              {item.discount_percentage && item.discount_percentage > 0 ? (
+                <div className="flex items-center gap-2">
+                  <div className="text-red-600 font-bold text-base">{rupiahFormat(item.price)}</div>
+                  <div className="line-through text-sm text-muted-foreground">{rupiahFormat(item.original_price!)}</div>
+                </div>
+              ) : (
+                <div className="font-bold text-base text-primary">{rupiahFormat(item.price)}</div>
+              )}
             </div>
             <div className="flex items-center justify-end w-full p-2">
               <Button variant={"ghost"} onClick={() => removeProduct(item.id)} className="w-4 h-6 rounded-md text-center text-sm font-semibold border border-[#E5E5E5] mr-2">
