@@ -17,7 +17,7 @@ export default function CartProduct() {
           <Image src={item.image_url} alt={item.name} loading="lazy" className="aspect-[1/1] h-fit w-fit object-cover rounded-t-md p-2" width={60} height={60} />
           <div className="w-full">
             <div className="p-2">
-              <p className="font-medium text-base truncate">{item.name}</p>
+              <p className="font-medium text-base">{item.name}</p>
               {item.discount_percentage && item.discount_percentage > 0 ? (
                 <div className="flex items-center gap-2">
                   <div className="text-red-600 font-bold text-base">{rupiahFormat(item.price)}</div>

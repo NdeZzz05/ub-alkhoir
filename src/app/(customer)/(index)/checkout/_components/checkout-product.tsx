@@ -14,7 +14,7 @@ export default function CheckoutProduct() {
           <Image src={item.image_url} alt={item.name} loading="lazy" className="aspect-[1/1] h-fit w-fit object-cover rounded-t-md p-2" width={40} height={40} />
           <div className="w-full">
             <div className="p-2 flex flex-col justify-between h-full">
-              <p className="font-medium text-sm truncate">{item.name}</p>
+              <p className="font-medium text-sm">{item.name}</p>
               <div className="flex justify-between items-center">
                 {item.discount_percentage && item.discount_percentage > 0 ? (
                   <div className="flex items-center gap-2">

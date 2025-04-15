@@ -26,12 +26,9 @@ enum StatusOrder {
   canceled
 }
 
-enum MethodPayment {
+enum PaymentMethod {
   cod
-  cash
-  credit_card
-  e_wallet
-  bank_transfer
+  transfer
 }
 
 enum StatusPayment {
@@ -119,20 +116,21 @@ model Order {
 }
 
 model OrderDetail {
-  id          String  @id @default(cuid())
-  name        String  @db.VarChar(255)
-  phone       String  @db.VarChar(255)
-  address     String? @db.VarChar(255)
-  notes       String? @db.VarChar(255)
-  order_type  OrderType
+  id              String  @id @default(cuid())
+  name            String  @db.VarChar(255)
+  phone           String  @db.VarChar(255)
+  address         String? @db.VarChar(255)
+  notes           String? @db.VarChar(255)
+  order_type      OrderType
+  payment_method  PaymentMethod
 
-  order_id   String   @unique
-  order      Order   @relation(fields: [order_id], references: [id])
-  plot_id    String
-  plot       Plot @relation(fields: [plot_id], references: [id])
+  order_id        String   @unique
+  order           Order   @relation(fields: [order_id], references: [id])
+  plot_id         String
+  plot            Plot @relation(fields: [plot_id], references: [id])
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
 }
 
 model OrderProduct {
