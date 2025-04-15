@@ -38,6 +38,7 @@ export default function CardProduct({ item }: CardProductProps) {
             category: item.category,
             discount_percentage: item.discount_percentage,
             original_price: item.original_price,
+            stock: item.stock,
           }}
           className="w-full"
         />

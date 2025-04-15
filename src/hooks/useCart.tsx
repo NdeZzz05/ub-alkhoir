@@ -21,18 +21,18 @@ export const useCart = create<CartState>()(
       increaseQuantity: (id) => {
         const newProducts = get().products.map((item) => {
           if (item.id === id) {
+            const maxQuantity = item.stock ?? Infinity;
+            if (item.quantity >= maxQuantity) return item;
+
             return {
               ...item,
               quantity: item.quantity + 1,
             };
           }
-
           return item;
         });
 
-        set({
-          products: newProducts,
-        });
+        set({ products: newProducts });
       },
       decreaseQuantity: (id) => {
         const newProducts = get().products.map((item) => {

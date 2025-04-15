@@ -35,6 +35,7 @@ export async function getProducts() {
         name: true,
         image: true,
         price: true,
+        stock: true,
         category: {
           select: {
             name: true,

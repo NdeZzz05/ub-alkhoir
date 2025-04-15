@@ -9,7 +9,6 @@ import React from "react";
 
 export default function CartProduct() {
   const { products, decreaseQuantity, increaseQuantity, removeProduct } = useCart();
-  console.log(products, "prod");
 
   return (
     <>
@@ -27,6 +26,7 @@ export default function CartProduct() {
               ) : (
                 <div className="font-bold text-base text-primary">{rupiahFormat(item.price)}</div>
               )}
+              <p className="text-xs text-muted-foreground">Stok tersisa: {item.stock - item.quantity}</p>
             </div>
             <div className="flex items-center justify-end w-full p-2">
               <Button variant={"ghost"} onClick={() => removeProduct(item.id)} className="w-4 h-6 rounded-md text-center text-sm font-semibold border border-[#E5E5E5] mr-2">
@@ -37,7 +37,8 @@ export default function CartProduct() {
                   <Minus width={18} />
                 </Button>
                 <p className="text-primary font-semibold text-center w-12 border-y rounded-md">{item.quantity}</p>
-                <Button variant={"default"} onClick={() => increaseQuantity(item.id)} className="w-4 h-6 px-4">
+
+                <Button variant={"default"} onClick={() => increaseQuantity(item.id)} disabled={item.quantity >= item.stock} className="w-4 h-6 px-4">
                   <Plus width={18} />
                 </Button>
               </div>

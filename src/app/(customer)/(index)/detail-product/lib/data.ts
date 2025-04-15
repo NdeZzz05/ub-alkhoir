@@ -19,6 +19,7 @@ export async function getProductById(id: string) {
         image: true,
         description: true,
         price: true,
+        stock: true,
         category: {
           select: {
             name: true,

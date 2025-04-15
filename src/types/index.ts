@@ -22,6 +22,7 @@ export type TProduct = {
   category: {
     name: string;
   };
+  stock: number;
   original_price?: number;
   discount_percentage?: number;
 };

@@ -40,6 +40,11 @@ enum StatusPayment {
   failed
 }
 
+enum OrderType {
+  pick_up
+  delivery
+}
+
 model Category {
   id    String @id @default(uuid())
   name  String
@@ -59,7 +64,6 @@ model User {
   phone_number String
   role         RoleUser @default(customer)
 
-  carts         Cart[]
   orders        Order[]
   notifications Notification[]
   session       Session[]
@@ -77,7 +81,7 @@ model Session {
 }
 
 model Product {
-  id          String @id @default(uuid())
+  id          String @id @default(cuid())
   name        String
   image       String
   price       Int
@@ -89,7 +93,6 @@ model Product {
   promo_id    String?    // Nullable, karena nggak semua produk pasti diskon
   promo       Promo? @relation(fields: [promo_id], references: [id])
 
-  carts           Cart[]
   order_product   OrderProduct[]
   sales_analytics SalesAnalytic[]
 
@@ -97,45 +100,33 @@ model Product {
   updated_at DateTime @updatedAt
 }
 
-model Cart {
-  id       String @id @default(uuid())
-  quantity Int
-
-  user_id    String
-  user       User    @relation(fields: [user_id], references: [id])
-  product_id String
-  product    Product @relation(fields: [product_id], references: [id])
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-}
-
 model Order {
-  id            String         @id @default(uuid())
-  code          String         @unique @db.VarChar(10) 
-  status        StatusOrder    
-  total         BigInt         @db.BigInt
+  id              String         @id @default(cuid())
+  code            String         @unique @db.VarChar(10) 
+  status_order    StatusOrder    @default(processed)
+  status_payment  StatusPayment  
+  total           BigInt         @db.BigInt
 
-  user_id       String
-  user          User           @relation(fields: [user_id], references: [id])
+  user_id         String
+  user            User           @relation(fields: [user_id], references: [id])
 
-  order_detail  OrderDetail[]
-  order_product OrderProduct[]
-  payment       Payment?
-  notifications Notification[]
+  order_detail    OrderDetail?
+  order_product   OrderProduct[]
+  notifications   Notification[]
 
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
 }
 
 model OrderDetail {
-  id       String @id @default(uuid())
+  id          String  @id @default(cuid())
   name        String  @db.VarChar(255)
   phone       String  @db.VarChar(255)
-  address     String  @db.VarChar(255)
+  address     String? @db.VarChar(255)
   notes       String? @db.VarChar(255)
+  order_type  OrderType
 
-  order_id   String
+  order_id   String   @unique
   order      Order   @relation(fields: [order_id], references: [id])
   plot_id    String
   plot       Plot @relation(fields: [plot_id], references: [id])
@@ -145,7 +136,7 @@ model OrderDetail {
 }
 
 model OrderProduct {
-  id         String @id @default(uuid())
+  id         String @id @default(cuid())
 
   subtotal   BigInt @db.BigInt
   quantity   Int @db.Integer
@@ -169,23 +160,8 @@ model Plot {
   updated_at DateTime @updatedAt
 }
 
-model Payment {
-  id               String        @id @default(uuid())
-  transaction_date DateTime      @default(now())
-  status           StatusPayment @default(pending)
-  method           MethodPayment
-
-  order_id         String  @unique
-  order            Order   @relation(fields: [order_id], references: [id])
-  transaction_id   String? // Untuk menyimpan ID transaksi dari payment gateway jika pakai transfer
-  payment_provider String? // Nama payment gateway jika menggunakan metode transfer
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-}
-
 model Promo {
-  id                  String   @id @default(uuid())
+  id                  String   @id @default(cuid())
   discount_percentage Int
   image               String
 
@@ -196,7 +172,7 @@ model Promo {
 }
 
 model SalesAnalytic {
-  id            String   @id @default(uuid())
+  id            String   @id @default(cuid())
   total_sales   Int
   total_revenue Int
   total_orders  Int
@@ -211,7 +187,7 @@ model SalesAnalytic {
 }
 
 model Notification {
-  id      String   @id @default(uuid())
+  id      String   @id @default(cuid())
   message String
   sent_at DateTime @default(now())
   link    String

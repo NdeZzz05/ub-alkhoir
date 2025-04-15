@@ -46,6 +46,7 @@ export default async function DetailProductPage({ params }: TDetailProduct) {
               category: product.category,
               discount_percentage: product.discount_percentage,
               original_price: product.original_price,
+              stock: product.stock,
             }}
             className=""
           />

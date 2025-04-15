@@ -59,6 +59,7 @@ export async function POST(request: Request) {
             discount_percentage: true,
           },
         },
+        stock: true,
       },
     });
 
@@ -73,6 +74,7 @@ export async function POST(request: Request) {
         category: product.category,
         original_price: Number(product.price),
         discount_percentage: discount,
+        stock: product.stock,
       };
     });
 
