@@ -8,6 +8,7 @@ interface CartState {
   increaseQuantity: (id: string) => void;
   decreaseQuantity: (id: string) => void;
   removeProduct: (id: string) => void;
+  clearCart: () => void;
 }
 
 export const useCart = create<CartState>()(
@@ -54,6 +55,7 @@ export const useCart = create<CartState>()(
         set({
           products: [...get().products.filter((item) => item.id !== id)],
         }),
+      clearCart: () => set({ products: [] }),
     }),
     {
       name: "cart-product-ub-alkhoir",

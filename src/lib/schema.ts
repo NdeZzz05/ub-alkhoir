@@ -52,3 +52,16 @@ export const schemaProductEdit = z.object({
   stock: z.string({ required_error: "Stok wajib diisi" }),
   category_id: z.string({ required_error: "Kategori wajib dipilih" }),
 });
+
+export const OrderTypeEnum = z.enum(["pick_up", "delivery"]);
+export const PaymentMethodEnum = z.enum(["cod", "transfer"]);
+
+export const schemaOrderProduct = z.object({
+  name: z.string({ required_error: "Nama pembeli wajib diisi" }).min(2, { message: "Nama minimal 2 karakter" }),
+  phone: z.string({ required_error: "Nomor whatsapp wajib diisi" }).min(10, { message: "Nomor whatsapp tidak valid" }),
+  plot_id: z.string({ required_error: "Data kavling dan blok wajib diisi" }).min(10, { message: "Data tidak valid" }),
+  address: z.string().optional(),
+  notes: z.string().optional(),
+  order_type: OrderTypeEnum,
+  payment_method: PaymentMethodEnum,
+});
