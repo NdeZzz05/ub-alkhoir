@@ -87,7 +87,7 @@ model Product {
 
   category_id String
   category    Category @relation(fields: [category_id], references: [id])
-  promo_id    String?    // Nullable, karena nggak semua produk pasti diskon
+  promo_id    String? 
   promo       Promo? @relation(fields: [promo_id], references: [id])
 
   order_product   OrderProduct[]
