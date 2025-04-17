@@ -3,7 +3,6 @@
 import { schemaCategory } from "@/lib/schema";
 import { deleteFile, uploadFile } from "@/lib/supabase";
 import { ActionResult } from "@/types";
-import { redirect } from "next/navigation";
 import prisma from "../../../../../../../lib/prisma";
 
 export async function postCategory(_: unknown, formData: FormData): Promise<ActionResult> {
@@ -25,11 +24,16 @@ export async function postCategory(_: unknown, formData: FormData): Promise<Acti
         image: fileName,
       },
     });
+
+    return {
+      error: "",
+      success: "Berhasil buat data kategori",
+      redirectURL: "/dashboard/category",
+    };
   } catch (error) {
     console.error(error);
     return { error: "Gagal membuat kategori" };
   }
-  return redirect("/dashboard/category");
 }
 
 export async function updateCategory(_: unknown, formData: FormData, id: string): Promise<ActionResult> {
@@ -62,12 +66,16 @@ export async function updateCategory(_: unknown, formData: FormData, id: string)
         image: fileName,
       },
     });
+
+    return {
+      error: "",
+      success: "Berhasil mengubah data kategori",
+      redirectURL: "/dashboard/category",
+    };
   } catch (error) {
     console.error(error);
     return { error: "Gagal mengubah kategori" };
   }
-
-  return redirect("/dashboard/category");
 }
 
 export async function deleteCategory(_: unknown, formData: FormData, id: string): Promise<ActionResult> {
@@ -86,9 +94,14 @@ export async function deleteCategory(_: unknown, formData: FormData, id: string)
     await prisma.category.delete({
       where: { id },
     });
+
+    return {
+      error: "",
+      success: "Berhasil hapus data kategori",
+      redirectURL: "/dashboard/category",
+    };
   } catch (error) {
     console.error(error);
     return { error: "Gagal menghapus kategori" };
   }
-  return redirect("/dashboard/category");
 }

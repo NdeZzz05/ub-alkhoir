@@ -2,7 +2,6 @@
 
 import { schemaRegister } from "@/lib/schema";
 import { ActionResult } from "@/types";
-import { redirect } from "next/navigation";
 import bcrypt from "bcrypt";
 import prisma from "../../../../../lib/prisma";
 
@@ -18,6 +17,16 @@ export async function Register(_: unknown, formData: FormData): Promise<ActionRe
     return { error: parse.error.errors[0].message };
   }
 
+  const existingUser = await prisma.user.findFirst({
+    where: { email: parse.data.email },
+  });
+
+  if (existingUser) {
+    return {
+      error: "Email sudah dipakai. Gunakan email yang lain, ya!",
+    };
+  }
+
   const hashedPassword = await bcrypt.hash(parse.data.password, 12);
 
   try {
@@ -30,10 +39,14 @@ export async function Register(_: unknown, formData: FormData): Promise<ActionRe
         role: "customer",
       },
     });
+
+    return {
+      error: "",
+      success: "Akun berhasil dibuat! Silakan masuk untuk mulai belanja.",
+      redirectURL: "/login",
+    };
   } catch (error) {
     console.log(error);
-    return { error: "Terjadi kesalahan saat daftar akun" };
+    return { error: "Oops! Gagal membuat akun. Silakan coba lagi." };
   }
-
-  return redirect("/login");
 }

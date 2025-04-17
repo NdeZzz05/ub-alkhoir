@@ -57,9 +57,10 @@ export default function FormOrder({ plot }: FormOrderProps) {
       pushAlert(state.error, "danger");
     }
 
-    if (state.success && state.redirectPaymentURL) {
+    if (state.success && state.redirectURL) {
       clearCart();
-      redirect(state.redirectPaymentURL);
+      pushAlert(state.success, "success");
+      redirect(state.redirectURL);
     }
   }, [state, clearCart]);
 

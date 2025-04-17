@@ -14,6 +14,7 @@ import { postPromo, updatePromo } from "../lib/action";
 import { Checkbox } from "@/components/ui/checkbox";
 import Image from "next/image";
 import { getImageUrl } from "@/lib/supabase";
+import { redirect } from "next/navigation";
 
 const initialState: ActionResult = {
   error: "",
@@ -46,7 +47,15 @@ export default function FormPromo({ data, type, products }: FormPromoProps) {
     if (state.error) {
       pushAlert(state.error, "danger");
     }
-  }, [state]);
+    if (type === "EDIT" && state.success && state.redirectURL) {
+      pushAlert(state.success, "success");
+      redirect(state.redirectURL);
+    }
+    if (type === "ADD" && state.success && state.redirectURL) {
+      pushAlert(state.success, "success");
+      redirect(state.redirectURL);
+    }
+  }, [state, type]);
   return (
     <>
       <div className="flex flex-1 flex-col gap-4 p-4">

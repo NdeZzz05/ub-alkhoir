@@ -5,6 +5,7 @@ import React, { useActionState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 import { pushAlert } from "@/lib/client";
 import { deletePromo } from "../lib/action";
+import { redirect } from "next/navigation";
 
 const initialState: ActionResult = {
   error: "",
@@ -32,6 +33,10 @@ export default function FormDelete({ id }: FormDeleteProps) {
   useEffect(() => {
     if (state.error) {
       pushAlert(state.error, "danger");
+    }
+    if (state.success && state.redirectURL) {
+      pushAlert(state.success, "success");
+      redirect(state.redirectURL);
     }
   }, [state]);
   return (

@@ -10,6 +10,7 @@ import { useActionState, useEffect } from "react";
 import { pushAlert } from "@/lib/client";
 import { Register } from "../lib/action";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 const initialState: ActionResult = {
   error: "",
@@ -23,6 +24,10 @@ export function RegisterForm({ className, ...props }: React.ComponentPropsWithou
   useEffect(() => {
     if (state.error) {
       pushAlert(state.error, "danger");
+    }
+    if (state.success && state.redirectURL) {
+      pushAlert(state.success, "success");
+      redirect(state.redirectURL);
     }
   }, [state]);
 

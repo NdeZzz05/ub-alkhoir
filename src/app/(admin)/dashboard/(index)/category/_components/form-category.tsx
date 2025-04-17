@@ -12,6 +12,7 @@ import { Category } from "@prisma/client";
 import Link from "next/link";
 import { pushAlert } from "@/lib/client";
 import UploadImage from "./upload-image";
+import { redirect } from "next/navigation";
 
 const initialState: ActionResult = {
   error: "",
@@ -37,7 +38,15 @@ export default function FormCategory({ data, type }: FormCategoryProps) {
     if (state.error) {
       pushAlert(state.error, "danger");
     }
-  }, [state]);
+    if (type === "EDIT" && state.success && state.redirectURL) {
+      pushAlert(state.success, "success");
+      redirect(state.redirectURL);
+    }
+    if (type === "ADD" && state.success && state.redirectURL) {
+      pushAlert(state.success, "success");
+      redirect(state.redirectURL);
+    }
+  }, [state, type]);
   return (
     <>
       <div className="flex flex-1 flex-col gap-4 p-4">

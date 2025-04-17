@@ -5,6 +5,8 @@ import { SidebarGroup, SidebarGroupContent, SidebarMenu, SidebarMenuButton, Side
 import { useActionState } from "react";
 import { Logout } from "../lib/action";
 import { ActionResult } from "@/types";
+import { pushAlert } from "@/lib/client";
+import { redirect } from "next/navigation";
 
 const initialState: ActionResult = {
   error: "",
@@ -19,7 +21,17 @@ export function FormLogout({
     emoji: string;
   };
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
-  const [, formAction] = useActionState(Logout, initialState);
+  const [state, formAction] = useActionState(Logout, initialState);
+
+  React.useEffect(() => {
+    if (state.error) {
+      pushAlert(state.error, "danger");
+    }
+    if (state.success && state.redirectURL) {
+      pushAlert(state.success, "success");
+      redirect(state.redirectURL);
+    }
+  }, [state]);
   return (
     <SidebarGroup {...props}>
       <SidebarGroupContent>

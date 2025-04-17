@@ -1,7 +1,7 @@
 export type ActionResult = {
-  error: string;
-  success?: boolean;
-  redirectPaymentURL?: string;
+  error?: string;
+  success?: string;
+  redirectURL?: string;
 };
 
 export type TParams = {

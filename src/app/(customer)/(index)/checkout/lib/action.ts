@@ -81,8 +81,8 @@ export async function storeOrder(_: unknown, formData: FormData, total: number, 
 
     if (parse.data.payment_method === "cod") {
       return {
-        success: true,
-        redirectPaymentURL: `/transaction/${order.id}`,
+        success: "Terima kasih! Kami sudah menerima pesanan kamu. Mohon ditunggu, ya.",
+        redirectURL: `/transaction/${order.id}`,
         error: "",
       };
     }
@@ -108,8 +108,8 @@ export async function storeOrder(_: unknown, formData: FormData, total: number, 
     const redirectPaymentURL = response.actions?.find((val) => val.urlType === "DEEPLINK")?.url ?? "/";
 
     return {
-      success: true,
-      redirectPaymentURL: redirectPaymentURL,
+      success: "Terima kasih! Kami sudah menerima pesanan kamu. Mohon ditunggu, ya.",
+      redirectURL: redirectPaymentURL,
       error: "",
     };
   } catch (error) {

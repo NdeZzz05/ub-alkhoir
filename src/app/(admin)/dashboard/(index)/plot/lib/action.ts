@@ -2,7 +2,6 @@
 
 import { schemaPlot } from "@/lib/schema";
 import { ActionResult } from "@/types";
-import { redirect } from "next/navigation";
 import prisma from "../../../../../../../lib/prisma";
 
 export async function postPlot(_: unknown, formData: FormData): Promise<ActionResult> {
@@ -20,11 +19,16 @@ export async function postPlot(_: unknown, formData: FormData): Promise<ActionRe
         name: validate.data.name,
       },
     });
+
+    return {
+      error: "",
+      success: "Berhasil buat data kavling",
+      redirectURL: "/dashboard/plot",
+    };
   } catch (error) {
     console.error(error);
     return { error: "Gagal membuat data kavling" };
   }
-  return redirect("/dashboard/plot");
 }
 
 export async function updatePlot(_: unknown, formData: FormData, id: string): Promise<ActionResult> {
@@ -43,12 +47,15 @@ export async function updatePlot(_: unknown, formData: FormData, id: string): Pr
         name: validate.data.name,
       },
     });
+    return {
+      error: "",
+      success: "Berhasil mengubah data kavling",
+      redirectURL: "/dashboard/plot",
+    };
   } catch (error) {
     console.error(error);
     return { error: "Gagal mengubah data kavling" };
   }
-
-  return redirect("/dashboard/plot");
 }
 
 export async function deletePlot(_: unknown, formData: FormData, id: string): Promise<ActionResult> {
@@ -64,9 +71,14 @@ export async function deletePlot(_: unknown, formData: FormData, id: string): Pr
     await prisma.plot.delete({
       where: { id },
     });
+
+    return {
+      error: "",
+      success: "Berhasil menghapus data kavling",
+      redirectURL: "/dashboard/plot",
+    };
   } catch (error) {
     console.error(error);
     return { error: "Gagal menghapus data Kavling" };
   }
-  return redirect("/dashboard/plot");
 }

@@ -3,7 +3,6 @@
 import { schemaProduct, schemaProductEdit } from "@/lib/schema";
 import { deleteFile, uploadFile } from "@/lib/supabase";
 import { ActionResult } from "@/types";
-import { redirect } from "next/navigation";
 import prisma from "../../../../../../../lib/prisma";
 
 export async function storeProduct(_: unknown, formData: FormData): Promise<ActionResult> {
@@ -39,12 +38,16 @@ export async function storeProduct(_: unknown, formData: FormData): Promise<Acti
         image: filename,
       },
     });
+
+    return {
+      error: "",
+      success: "Berhasil buat data produk",
+      redirectURL: "/dashboard/product",
+    };
   } catch (error) {
     console.error("Gagal membuat produk:", error);
     return { error: "Gagal membuat produk baru" };
   }
-
-  return redirect("/dashboard/product");
 }
 
 export async function updateProduct(_: unknown, formData: FormData, id: string): Promise<ActionResult> {
@@ -94,12 +97,16 @@ export async function updateProduct(_: unknown, formData: FormData, id: string):
         image: filename,
       },
     });
+
+    return {
+      error: "",
+      success: "Berhasil mengubah data produk",
+      redirectURL: "/dashboard/product",
+    };
   } catch (error) {
     console.error("Gagal mengubah produk:", error);
     return { error: "Gagal mengubah produk" };
   }
-
-  return redirect("/dashboard/product");
 }
 
 export async function deleteProduct(_: unknown, formData: FormData, id: string): Promise<ActionResult> {
@@ -120,9 +127,14 @@ export async function deleteProduct(_: unknown, formData: FormData, id: string):
     await prisma.product.delete({
       where: { id },
     });
+
+    return {
+      error: "",
+      success: "Berhasil menghapus data produk",
+      redirectURL: "/dashboard/product",
+    };
   } catch (error) {
     console.error(error);
     return { error: "Gagal menghapus produk" };
   }
-  return redirect("/dashboard/product");
 }

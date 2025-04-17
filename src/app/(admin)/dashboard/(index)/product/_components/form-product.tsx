@@ -2,7 +2,7 @@
 
 import React, { ReactNode, useActionState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useFormStatus } from "react-dom";
@@ -14,6 +14,7 @@ import { ActionResult } from "@/types";
 import { storeProduct, updateProduct } from "../lib/action";
 import { pushAlert } from "@/lib/client";
 import { Product } from "@prisma/client";
+import { redirect } from "next/navigation";
 
 interface FormProductProps {
   children: ReactNode;
@@ -40,7 +41,15 @@ export default function FormProduct({ children, type, data }: FormProductProps) 
     if (state.error) {
       pushAlert(state.error, "danger");
     }
-  }, [state]);
+    if (type === "EDIT" && state.success && state.redirectURL) {
+      pushAlert(state.success, "success");
+      redirect(state.redirectURL);
+    }
+    if (type === "ADD" && state.success && state.redirectURL) {
+      pushAlert(state.success, "success");
+      redirect(state.redirectURL);
+    }
+  }, [state, type]);
   return (
     <>
       <div className="flex flex-1 flex-col gap-4 p-4">
@@ -49,7 +58,6 @@ export default function FormProduct({ children, type, data }: FormProductProps) 
             <Card className="w-[350px]">
               <CardHeader>
                 <CardTitle>Produk</CardTitle>
-                <CardDescription>aa</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid w-full items-center gap-4">

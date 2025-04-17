@@ -3,7 +3,6 @@
 import { schemaPromo } from "@/lib/schema";
 import { deleteFile, uploadFile } from "@/lib/supabase";
 import { ActionResult } from "@/types";
-import { redirect } from "next/navigation";
 import prisma from "../../../../../../../lib/prisma";
 
 export async function postPromo(_: unknown, formData: FormData): Promise<ActionResult> {
@@ -29,11 +28,16 @@ export async function postPromo(_: unknown, formData: FormData): Promise<ActionR
         },
       },
     });
+
+    return {
+      error: "",
+      success: "Berhasil buat data promo",
+      redirectURL: "/dashboard/promo",
+    };
   } catch (error) {
     console.error(error);
     return { error: "Gagal membuat promo" };
   }
-  return redirect("/dashboard/promo");
 }
 
 export async function updatePromo(_: unknown, formData: FormData, id: string): Promise<ActionResult> {
@@ -66,12 +70,16 @@ export async function updatePromo(_: unknown, formData: FormData, id: string): P
         image: fileName,
       },
     });
+
+    return {
+      error: "",
+      success: "Berhasil mengubah data promo",
+      redirectURL: "/dashboard/promo",
+    };
   } catch (error) {
     console.error(error);
     return { error: "Gagal mengubah promo" };
   }
-
-  return redirect("/dashboard/promo");
 }
 
 export async function deletePromo(_: unknown, formData: FormData, id: string): Promise<ActionResult> {
@@ -90,9 +98,14 @@ export async function deletePromo(_: unknown, formData: FormData, id: string): P
     await prisma.promo.delete({
       where: { id },
     });
+
+    return {
+      error: "",
+      success: "Berhasil menghapus data promo",
+      redirectURL: "/dashboard/promo",
+    };
   } catch (error) {
     console.error(error);
     return { error: "Gagal menghapus promo" };
   }
-  return redirect("/dashboard/promo");
 }

@@ -2,7 +2,6 @@
 
 import { schemaLogIn } from "@/lib/schema";
 import { ActionResult } from "@/types";
-import { redirect } from "next/navigation";
 import bcrypt from "bcrypt";
 import { lucia } from "@/lib/auth";
 import { cookies } from "next/headers";
@@ -42,5 +41,9 @@ export async function LogIn(_: unknown, formData: FormData): Promise<ActionResul
   const sessionCookie = lucia.createSessionCookie(session.id);
   (await cookies()).set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
 
-  return redirect(existingUser.role === "admin" ? "/dashboard" : "/");
+  return {
+    error: "",
+    success: "Berhasil masuk. Senang melihatmu lagi!",
+    redirectURL: existingUser.role === "admin" ? "/dashboard" : "/",
+  };
 }
