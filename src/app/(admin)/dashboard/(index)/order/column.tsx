@@ -11,6 +11,7 @@ import { MoreVerticalIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { MdWhatsapp } from "react-icons/md";
+import OrderActionButton from "./_components/order-action-button";
 
 type TProduct = {
   name: string;
@@ -100,33 +101,8 @@ export const columns: ColumnDef<TColumn>[] = [
     id: "action",
     header: "Aksi",
     cell: ({ row }) => {
-      const order = row.original;
-      if (order.status_order === "processed") {
-        return (
-          <Button size="sm" variant={"secondary"} disabled={order.status_payment === "pending" && order.payment_method === "transfer"} className="p-2 text-xs bg-yellow-500 hover:bg-yellow-600">
-            {order.status_payment === "pending" && order.payment_method === "transfer" ? "Belum Dibayar" : "Kirim Pesanan"}
-          </Button>
-        );
-      }
-      if (order.status_order === "shipped") {
-        return (
-          <Button size="sm" variant="outline" className="p-2 text-xs bg-blue-500 hover:bg-blue-700 text-white hover:text-white">
-            Pesanan Diterima
-          </Button>
-        );
-      }
-      if (order.status_order === "completed") {
-        return (
-          <Badge variant="default" className="bg-green-500 text-white">
-            Selesai
-          </Badge>
-        );
-      }
-      if (order.status_order === "canceled") {
-        return <Badge variant="destructive">Batal</Badge>;
-      }
-
-      return null;
+      const { status_order, status_payment, payment_method, type_order } = row.original;
+      return <OrderActionButton status_order={status_order} status_payment={status_payment} payment_method={payment_method} type_order={type_order} />;
     },
   },
   {

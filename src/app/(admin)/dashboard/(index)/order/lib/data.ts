@@ -48,6 +48,19 @@ export async function getOrderById(id: string) {
       where: {
         id: id,
       },
+      include: {
+        order_detail: {
+          include: {
+            plot: true,
+          },
+        },
+        order_product: {
+          include: {
+            product: true,
+          },
+        },
+        user: true,
+      },
     });
     return order;
   } catch (error) {
