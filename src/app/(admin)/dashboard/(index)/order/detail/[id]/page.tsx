@@ -20,14 +20,14 @@ export default async function DetailPage({ params }: TEdit) {
       <Header page={"Pesanan"} />
       <div className="w-full flex flex-col gap-2 justify-center items-center p-4">
         {/*  */}
-        <div id="Status-Action" className="border w-full xl:w-1/2 p-4 rounded-md shadow-md">
+        <div className="border w-full xl:w-1/2 p-4 rounded-md shadow-md">
           <div className="flex items-center gap-2 justify-between">
             <p className="text-sm font-thin text-gray-500">YANG DAPAT DILAKUKAN SELANJUTNYA</p>
-            <OrderActionButton status_order={order?.status_order} status_payment={order?.status_payment} payment_method={order?.order_detail?.payment_method} type_order={order?.order_detail?.order_type} />
+            <OrderActionButton id={order?.id} page="detail" status_order={order?.status_order} status_payment={order?.status_payment} payment_method={order?.order_detail?.payment_method} type_order={order?.order_detail?.order_type} />
           </div>
         </div>
         {/*  */}
-        <div id="akunUser" className="border w-full xl:w-1/2 p-4 rounded-md shadow-md flex flex-col gap-1">
+        <div className="border w-full xl:w-1/2 p-4 rounded-md shadow-md flex flex-col gap-1">
           <p className="font-semibold">Akun Pemesan</p>
           <div className="flex justify-between">
             <div>
@@ -42,7 +42,7 @@ export default async function DetailPage({ params }: TEdit) {
           </div>
         </div>
         {/*  */}
-        <div id="NomorOrder-Alamat" className="border w-full xl:w-1/2 p-4 rounded-md shadow-md flex flex-col gap-2">
+        <div className="border w-full xl:w-1/2 p-4 rounded-md shadow-md flex flex-col gap-2">
           <div className="space-y-1">
             <p className="font-semibold">Tipe Orderan</p>
             <div className="text-sm text-gray-500 space-x-1">
@@ -59,7 +59,7 @@ export default async function DetailPage({ params }: TEdit) {
           </div>
         </div>
         {/*  */}
-        <div id="detail-orderanProduk" className="border w-full xl:w-1/2 p-4 rounded-md shadow-md flex flex-col gap-1">
+        <div className="border w-full xl:w-1/2 p-4 rounded-md shadow-md flex flex-col gap-1">
           <Table>
             <TableHeader>
               <TableRow>

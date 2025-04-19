@@ -101,8 +101,8 @@ export const columns: ColumnDef<TColumn>[] = [
     id: "action",
     header: "Aksi",
     cell: ({ row }) => {
-      const { status_order, status_payment, payment_method, type_order } = row.original;
-      return <OrderActionButton status_order={status_order} status_payment={status_payment} payment_method={payment_method} type_order={type_order} />;
+      const { id, status_order, status_payment, payment_method, type_order } = row.original;
+      return <OrderActionButton id={id} page="list" status_order={status_order} status_payment={status_payment} payment_method={payment_method} type_order={type_order} />;
     },
   },
   {

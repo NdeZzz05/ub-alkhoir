@@ -4,8 +4,15 @@ import { schemaCategory } from "@/lib/schema";
 import { deleteFile, uploadFile } from "@/lib/supabase";
 import { ActionResult } from "@/types";
 import prisma from "../../../../../../../lib/prisma";
+import { getUser } from "@/lib/auth";
 
 export async function postCategory(_: unknown, formData: FormData): Promise<ActionResult> {
+  const { user } = await getUser();
+
+  if (user?.role !== "admin") {
+    return { error: "Unauthorized" };
+  }
+
   const validate = schemaCategory.safeParse({
     name: formData.get("name"),
     image: formData.get("image"),
@@ -37,6 +44,12 @@ export async function postCategory(_: unknown, formData: FormData): Promise<Acti
 }
 
 export async function updateCategory(_: unknown, formData: FormData, id: string): Promise<ActionResult> {
+  const { user } = await getUser();
+
+  if (user?.role !== "admin") {
+    return { error: "Unauthorized" };
+  }
+
   const fileUpload = formData.get("image") as File;
 
   const validate = schemaCategory.pick({ name: true }).safeParse({
@@ -79,6 +92,12 @@ export async function updateCategory(_: unknown, formData: FormData, id: string)
 }
 
 export async function deleteCategory(_: unknown, formData: FormData, id: string): Promise<ActionResult> {
+  const { user } = await getUser();
+
+  if (user?.role !== "admin") {
+    return { error: "Unauthorized" };
+  }
+
   const category = await prisma.category.findFirst({
     where: { id },
     select: { image: true },

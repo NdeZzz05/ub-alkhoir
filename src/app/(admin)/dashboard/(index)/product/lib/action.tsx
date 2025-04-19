@@ -4,8 +4,15 @@ import { schemaProduct, schemaProductEdit } from "@/lib/schema";
 import { deleteFile, uploadFile } from "@/lib/supabase";
 import { ActionResult } from "@/types";
 import prisma from "../../../../../../../lib/prisma";
+import { getUser } from "@/lib/auth";
 
 export async function storeProduct(_: unknown, formData: FormData): Promise<ActionResult> {
+  const { user } = await getUser();
+
+  if (user?.role !== "admin") {
+    return { error: "Unauthorized" };
+  }
+
   const parse = schemaProduct.safeParse({
     name: formData.get("name"),
     price: formData.get("price"),
@@ -51,6 +58,12 @@ export async function storeProduct(_: unknown, formData: FormData): Promise<Acti
 }
 
 export async function updateProduct(_: unknown, formData: FormData, id: string): Promise<ActionResult> {
+  const { user } = await getUser();
+
+  if (user?.role !== "admin") {
+    return { error: "Unauthorized" };
+  }
+
   const fileUpload = formData.get("image") as File;
 
   const parse = schemaProductEdit.safeParse({
@@ -110,6 +123,12 @@ export async function updateProduct(_: unknown, formData: FormData, id: string):
 }
 
 export async function deleteProduct(_: unknown, formData: FormData, id: string): Promise<ActionResult> {
+  const { user } = await getUser();
+
+  if (user?.role !== "admin") {
+    return { error: "Unauthorized" };
+  }
+
   const product = await prisma.product.findFirst({
     where: { id },
     select: { id: true, image: true },

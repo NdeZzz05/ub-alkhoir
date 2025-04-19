@@ -3,8 +3,15 @@
 import { schemaPlot } from "@/lib/schema";
 import { ActionResult } from "@/types";
 import prisma from "../../../../../../../lib/prisma";
+import { getUser } from "@/lib/auth";
 
 export async function postPlot(_: unknown, formData: FormData): Promise<ActionResult> {
+  const { user } = await getUser();
+
+  if (user?.role !== "admin") {
+    return { error: "Unauthorized" };
+  }
+
   const validate = schemaPlot.safeParse({
     name: formData.get("name"),
   });

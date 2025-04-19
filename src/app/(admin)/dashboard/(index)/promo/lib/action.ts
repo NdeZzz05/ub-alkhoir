@@ -4,8 +4,15 @@ import { schemaPromo } from "@/lib/schema";
 import { deleteFile, uploadFile } from "@/lib/supabase";
 import { ActionResult } from "@/types";
 import prisma from "../../../../../../../lib/prisma";
+import { getUser } from "@/lib/auth";
 
 export async function postPromo(_: unknown, formData: FormData): Promise<ActionResult> {
+  const { user } = await getUser();
+
+  if (user?.role !== "admin") {
+    return { error: "Unauthorized" };
+  }
+
   const validate = schemaPromo.safeParse({
     discount_percentage: Number(formData.get("discount_percentage")),
     image: formData.get("image"),
@@ -41,6 +48,12 @@ export async function postPromo(_: unknown, formData: FormData): Promise<ActionR
 }
 
 export async function updatePromo(_: unknown, formData: FormData, id: string): Promise<ActionResult> {
+  const { user } = await getUser();
+
+  if (user?.role !== "admin") {
+    return { error: "Unauthorized" };
+  }
+
   const fileUpload = formData.get("image") as File;
 
   const validate = schemaPromo.pick({ discount_percentage: true }).safeParse({
@@ -83,6 +96,12 @@ export async function updatePromo(_: unknown, formData: FormData, id: string): P
 }
 
 export async function deletePromo(_: unknown, formData: FormData, id: string): Promise<ActionResult> {
+  const { user } = await getUser();
+
+  if (user?.role !== "admin") {
+    return { error: "Unauthorized" };
+  }
+
   const promo = await prisma.promo.findFirst({
     where: { id },
     select: { image: true },
