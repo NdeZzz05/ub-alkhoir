@@ -22,7 +22,11 @@ export default function OrderStatusBadge({ status_order, status_payment, payment
   }
 
   if (status_order === "shipped") {
-    return <Badge className="bg-yellow-500 text-white text-xs hover:bg-yellow-600">{type_order === "pick_up" ? "Siap Diambil" : "Sedang Dikirim"}</Badge>;
+    return (
+      <Badge className={type_order === "pick_up" ? "bg-yellow-500 text-white text-xs hover:bg-yellow-600" : "bg-blue-500 text-white text-xs hover:bg-blue-600"}>
+        {type_order === "pick_up" ? "Siap Diambil Ditoko" : "Sedang Diantar Kerumah"}
+      </Badge>
+    );
   }
 
   if (status_order === "completed") {
