@@ -20,8 +20,8 @@ const data = [
     emoji: "🛒",
   },
   {
-    title: "Transaksi",
-    url: "/transactions",
+    title: "Pesanan",
+    url: "/order",
     emoji: "💸",
   },
   {

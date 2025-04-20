@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "../../globals.css";
 import Navbar from "./_components/navbar";
+import { getUser } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Homepages",
@@ -12,6 +14,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { session, user } = await getUser();
+
+  if (session && user.role === "admin") {
+    return redirect("/dashboard");
+  }
   return (
     <div className="flex justify-center items-center">
       <div className="flex flex-col justify-center items-start w-full max-w-sm">

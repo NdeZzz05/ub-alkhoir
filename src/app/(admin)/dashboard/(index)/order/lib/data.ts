@@ -1,5 +1,19 @@
+import { TOrderFilter } from "@/hooks/useOrderFilter";
 import prisma from "../../../../../../../lib/prisma";
 import { TColumn } from "../column";
+
+export async function fetchOrders(filter?: TOrderFilter): Promise<{
+  orders: TColumn[];
+  count_by_status: Record<string, number>;
+}> {
+  const res = await fetch("/api/orders", {
+    method: "POST",
+    body: JSON.stringify(filter ?? {}),
+  });
+
+  const data = await res.json();
+  return data ?? { orders: [], count_by_status: {} };
+}
 
 export async function getOrders() {
   try {

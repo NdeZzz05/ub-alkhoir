@@ -102,6 +102,7 @@ model Order {
   code            String         @unique @db.VarChar(10) 
   status_order    StatusOrder    @default(processed)
   status_payment  StatusPayment  
+  token_payment   String? //ini untuk simpan token dari xendit, apabila pilih metode transfer
   total           BigInt         @db.BigInt
 
   user_id         String

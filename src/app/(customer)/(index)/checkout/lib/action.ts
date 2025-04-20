@@ -82,7 +82,7 @@ export async function storeOrder(_: unknown, formData: FormData, total: number, 
     if (parse.data.payment_method === "cod") {
       return {
         success: "Terima kasih! Kami sudah menerima pesanan kamu. Mohon ditunggu, ya.",
-        redirectURL: `/transaction/${order.id}`,
+        redirectURL: `/order`,
         error: "",
       };
     }
@@ -106,6 +106,14 @@ export async function storeOrder(_: unknown, formData: FormData, total: number, 
     const response: PaymentRequest = await xenditClient.PaymentRequest.createPaymentRequest({ data });
 
     const redirectPaymentURL = response.actions?.find((val) => val.urlType === "DEEPLINK")?.url ?? "/";
+    const token = new URL(redirectPaymentURL).searchParams.get("token");
+
+    await prisma.order.update({
+      where: { id: order.id },
+      data: {
+        token_payment: token ?? null,
+      },
+    });
 
     return {
       success: "Terima kasih! Kami sudah menerima pesanan kamu. Mohon ditunggu, ya.",
