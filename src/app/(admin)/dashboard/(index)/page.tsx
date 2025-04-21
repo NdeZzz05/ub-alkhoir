@@ -1,16 +1,20 @@
+import { CardsInfo } from "./_components/cards-info";
+import { ChartInfoInteractive } from "./_components/chart-info-interactive";
 import { Header } from "./_components/header";
+// import { getTotalOrder } from "./lib/data";
 
-export default function Page() {
+export default async function Page() {
+  // const total = await getTotalOrder();
+  // console.log(total);
+
   return (
     <>
       <Header page={null} />
       <section className="flex flex-1 flex-col gap-4 p-4">
-        <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-          <div className="aspect-video rounded-xl bg-muted/50">a</div>
-          <div className="aspect-video rounded-xl bg-muted/50">b</div>
-          <div className="aspect-video rounded-xl bg-muted/50">c</div>
+        <CardsInfo />
+        <div className="px-4 lg:px-6">
+          <ChartInfoInteractive />
         </div>
-        <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">d</div>
       </section>
     </>
   );
