@@ -71,8 +71,6 @@ export default function ListOrderByUser() {
     return status === statusParam ? "default" : "outline";
   };
 
-  console.log(orders, "data order");
-
   return (
     <>
       <div className="flex gap-2 overflow-x-scroll mb-4">
@@ -106,7 +104,7 @@ export default function ListOrderByUser() {
             </div>
             {item.products.map((product) => (
               <div key={product.name + 1} className="flex">
-                <Image key={product.name + 1} src={getImageUrl(product.image, "product")} alt={product.name} width={60} height={60} className="aspect-[1/1] h-fit w-fit object-cover rounded-t-md p-2" />
+                <Image key={product.name + 1} src={getImageUrl(product.image, "product")} alt={product.name} width={60} height={60} className="aspect-[1/1] h-fit w-fit object-cover rounded-t-md p-2" loading="lazy" />
                 <div className="w-full p-2">
                   <p className="font-medium text-sm">{product.name}</p>
                   <p className="text-sm w-full font-bold text-end">x{product.quantity}</p>

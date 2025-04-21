@@ -8,6 +8,7 @@ import { generateRandomString } from "@/lib/utils";
 import { PaymentRequestParameters, PaymentRequest } from "xendit-node/payment_request/models";
 import xenditClient from "@/lib/xendit";
 import { Prisma } from "@prisma/client";
+import { sendEmailNotification } from "./resend";
 
 export async function storeOrder(_: unknown, formData: FormData, total: number, products: TCart[]): Promise<ActionResult> {
   const { session, user } = await getUser();
@@ -78,6 +79,8 @@ export async function storeOrder(_: unknown, formData: FormData, total: number, 
         })
       ),
     ]);
+
+    sendEmailNotification({ name: parse.data.name, orderCode: order.code, orderType: parse.data.order_type, paymentMethod: parse.data.payment_method, phone: parse.data.phone, total: Number(order.total), orderDate: order.created_at });
 
     if (parse.data.payment_method === "cod") {
       return {
