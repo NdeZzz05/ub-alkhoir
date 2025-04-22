@@ -24,6 +24,7 @@ type TProduct = {
 };
 export type TColumn = {
   id: string;
+  code: string;
   products: TProduct[];
   customer_name: string;
   customer_phone: string;
@@ -96,7 +97,7 @@ export default function ListOrderByUser() {
         orders.map((item) => (
           <div key={item.id} className="bg-white rounded-md ring-1 ring-[#E5E5E5] mb-2">
             <div className="p-2 flex justify-between items-center bg-gray-300">
-              <p className="font-medium text-sm text-gray-500">Status Pesanan:</p>
+              <p className="font-medium text-sm text-gray-500">#{item.code}</p>
               <div>
                 <Badge className="bg-orange-500 hover:bg-orange-600">{item.payment_method}</Badge>
                 <OrderStatusBadge status_order={item.status_order} status_payment={item.status_payment} payment_method={item.payment_method} type_order={item.type_order} />

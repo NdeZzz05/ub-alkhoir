@@ -32,6 +32,7 @@ export async function getOrders() {
     const response: TColumn[] = orders.map((ord) => {
       return {
         id: ord.id,
+        code: ord.code,
         customer_name: ord.user.name,
         customer_phone: ord.user.phone_number,
         price: Number(ord.total),

@@ -21,6 +21,7 @@ type TProduct = {
 
 export type TColumn = {
   id: string;
+  code: string;
   products: TProduct[];
   customer_name: string;
   customer_phone: string;
@@ -49,6 +50,10 @@ export const columns: ColumnDef<TColumn>[] = [
         </Link>
       );
     },
+  },
+  {
+    accessorKey: "code",
+    header: "Kode",
   },
   {
     accessorKey: "customer_name",

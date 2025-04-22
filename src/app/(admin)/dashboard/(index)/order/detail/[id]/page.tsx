@@ -43,6 +43,7 @@ export default async function DetailPage({ params }: TEdit) {
         </div>
         {/*  */}
         <div className="border w-full xl:w-1/2 p-4 rounded-md shadow-md flex flex-col gap-2">
+          <p className="font-bold text-gray-500">#{order?.code}</p>
           <div className="space-y-1">
             <p className="font-semibold">Tipe Orderan</p>
             <div className="text-sm text-gray-500 space-x-1">
