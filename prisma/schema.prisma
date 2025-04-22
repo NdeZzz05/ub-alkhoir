@@ -62,7 +62,6 @@ model User {
   role         RoleUser @default(customer)
 
   orders        Order[]
-  notifications Notification[]
   session       Session[]
 
   created_at DateTime @default(now())
@@ -91,7 +90,6 @@ model Product {
   promo       Promo? @relation(fields: [promo_id], references: [id])
 
   order_product   OrderProduct[]
-  sales_analytics SalesAnalytic[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -110,7 +108,6 @@ model Order {
 
   order_detail    OrderDetail?
   order_product   OrderProduct[]
-  notifications   Notification[]
 
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
@@ -170,32 +167,4 @@ model Promo {
   updated_at DateTime @updatedAt
 }
 
-model SalesAnalytic {
-  id            String   @id @default(cuid())
-  total_sales   Int
-  total_revenue Int
-  total_orders  Int
-  start_date    DateTime
-  end_date      DateTime
 
-  top_selling_product_id String
-  top_selling_product    Product @relation(fields: [top_selling_product_id], references: [id])
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-}
-
-model Notification {
-  id      String   @id @default(cuid())
-  message String
-  sent_at DateTime @default(now())
-  link    String
-
-  user_id  String
-  user     User    @relation(fields: [user_id], references: [id])
-  order_id String?
-  order    Order?  @relation(fields: [order_id], references: [id])
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-}

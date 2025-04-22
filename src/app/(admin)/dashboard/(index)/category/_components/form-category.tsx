@@ -69,7 +69,7 @@ export default function FormCategory({ data, type }: FormCategoryProps) {
                 </div>
               </CardContent>
               <CardFooter className="flex justify-between">
-                <Button variant="outline">
+                <Button variant="outline" type="button">
                   <Link href={"/dashboard/category"}>Keluar</Link>
                 </Button>
                 <SubmitButton />

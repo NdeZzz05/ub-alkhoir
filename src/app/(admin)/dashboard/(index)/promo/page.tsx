@@ -1,16 +1,15 @@
 import { Header } from "../_components/header";
 import * as React from "react";
 import { PlusCircle } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./column";
 import { getPromo } from "./lib/data";
-// import { DataTable } from "@/components/ui/data-table";
 
 export default async function PromoPage() {
   const dataPromo = await getPromo();
+
   return (
     <>
       <Header page={"Promo"} />

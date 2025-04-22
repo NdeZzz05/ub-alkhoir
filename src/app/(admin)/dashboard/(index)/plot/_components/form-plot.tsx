@@ -50,9 +50,6 @@ export default function FormPlot({ data, type }: FormPlotProps) {
     <>
       <div className="flex flex-1 flex-col gap-4 p-4">
         <div className="w-full bg-muted/50 p-4 pt-8 justify-items-center h-full">
-          <Button variant="outline">
-            <Link href={"/dashboard/plot"}>Keluar</Link>
-          </Button>
           <form action={formAction}>
             <Card className="w-[350px]">
               <CardHeader>
@@ -68,6 +65,9 @@ export default function FormPlot({ data, type }: FormPlotProps) {
                 </div>
               </CardContent>
               <CardFooter className="flex justify-between">
+                <Button variant="outline" type="button">
+                  <Link href={"/dashboard/plot"}>Keluar</Link>
+                </Button>
                 <SubmitButton />
               </CardFooter>
             </Card>

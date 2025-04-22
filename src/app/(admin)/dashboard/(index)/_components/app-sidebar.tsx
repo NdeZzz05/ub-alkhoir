@@ -1,11 +1,13 @@
+"use client";
+
 import * as React from "react";
 
 import { VersionSwitcher } from "./version-switcher";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarRail } from "@/components/ui/sidebar";
 import { FormLogout } from "./form-logout";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-// This is sample data.
 const data = {
   versions: ["1.0.1"],
   navMain: [
@@ -57,17 +59,6 @@ const data = {
         },
       ],
     },
-    {
-      title: "Data",
-      url: "#",
-      items: [
-        {
-          title: "Data Penjualan",
-          url: "/dashboard/datacenter",
-          emoji: "📈",
-        },
-      ],
-    },
   ],
   navLogout: {
     title: "Logout",
@@ -76,6 +67,22 @@ const data = {
   },
 };
 
+function NavItem({ item }: { item: { title: string; url: string; emoji: string } }) {
+  const pathname = usePathname();
+  const isActive = pathname === item.url;
+
+  return (
+    <SidebarMenuItem className="sidebar-menu-item">
+      <SidebarMenuButton asChild isActive={isActive}>
+        <Link href={item.url} className={isActive ? "active" : ""}>
+          {item.emoji}
+          <span className="font-normal">{item.title}</span>
+        </Link>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  );
+}
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
@@ -83,25 +90,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <VersionSwitcher versions={data.versions} defaultVersion={data.versions[0]} />
       </SidebarHeader>
       <SidebarContent>
-        {/* We create a SidebarGroup for each parent. */}
         {data.navMain.map((item) => (
           <SidebarGroup key={item.title}>
             <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {item.items.map((item) => {
-                  const isActive = typeof window !== "undefined" && window.location.pathname === item.url;
-                  return (
-                    <SidebarMenuItem key={item.title} className="sidebar-menu-item">
-                      <SidebarMenuButton asChild isActive={isActive}>
-                        <Link href={item.url} className={isActive ? "active" : ""}>
-                          {item.emoji}
-                          <span className="font-normal">{item.title}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  );
-                })}
+                {item.items.map((item) => (
+                  <NavItem key={item.title} item={item} />
+                ))}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>

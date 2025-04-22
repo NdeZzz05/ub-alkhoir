@@ -1,12 +1,15 @@
+import { getUser } from "@/lib/auth";
 import { CardsInfo } from "./_components/cards-info";
 import { ChartInfoInteractive } from "./_components/chart-info-interactive";
 import { Header } from "./_components/header";
-// import { getTotalOrder } from "./lib/data";
+import { redirect } from "next/navigation";
 
 export default async function Page() {
-  // const total = await getTotalOrder();
-  // console.log(total);
+  const { session, user } = await getUser();
 
+  if (!session || user.role !== "admin") {
+    return redirect("/login");
+  }
   return (
     <>
       <Header page={null} />
