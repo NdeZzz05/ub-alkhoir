@@ -8,7 +8,7 @@ export default function OrderPage() {
       <header className="bg-gray-50 w-full p-2">
         <BackButton />
       </header>
-      <section id="" className="w-full p-3 pb-20">
+      <section className="w-full p-3 pb-20">
         <ListOrderByUser />
       </section>
     </>

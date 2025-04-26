@@ -10,17 +10,17 @@ export default function Page() {
     <>
       <SearchForm />
       <header>
-        <Suspense fallback={<SkeletonLoading width="w-[22rem]" height="h-[10rem]" />}>
+        <Suspense fallback={<SkeletonLoading width="w-[23.3rem]" height="h-[10rem]" />}>
           <ServerPromoCarousel />
         </Suspense>
       </header>
       <section id="content-category">
-        <Suspense fallback={<SkeletonLoading width="w-[22rem]" height="h-[4rem]" />}>
+        <Suspense fallback={<SkeletonLoading width="w-[23.3rem]" height="h-[4rem]" />}>
           <ListCategory />
         </Suspense>
       </section>
       <section id="content-product">
-        <Suspense fallback={<SkeletonLoading width="w-[22rem]" height="h-[15rem]" />}>
+        <Suspense fallback={<SkeletonLoading width="w-[23.3rem]" height="h-[15rem]" />}>
           <ListProduct />
         </Suspense>
       </section>

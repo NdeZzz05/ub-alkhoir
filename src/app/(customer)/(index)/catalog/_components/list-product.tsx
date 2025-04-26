@@ -6,6 +6,7 @@ import CardProduct from "../../_components/card-product";
 import { TFilter, useFilter } from "@/hooks/useFilter";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { SkeletonLoading } from "../../_components/sceleton-loading";
 
 export default function ListProduct() {
   const { filter } = useFilter();
@@ -30,16 +31,12 @@ export default function ListProduct() {
     }
   }, [categoryFromUrl, setFilter, promoFromUrl]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <SkeletonLoading width="w-[23.3rem]" height="h-[10rem]" />;
 
   return (
     <div id="products" className="flex flex-col p-2">
       <h2 className="font-bold text-base p-1">Produk</h2>
-      <div className="grid grid-cols-2 gap-2 p-1 pb-16">
-        {data?.map((item) => (
-          <CardProduct item={item} key={item.id} />
-        ))}
-      </div>
+      <div className="grid grid-cols-2 gap-2 p-1 pb-16">{data?.map((item) => <CardProduct item={item} key={item.id} />)}</div>
     </div>
   );
 }

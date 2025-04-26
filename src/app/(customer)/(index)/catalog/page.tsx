@@ -32,7 +32,7 @@ export default function CatalogPage() {
             </DialogContent>
           </Dialog>
         </div>
-        <Suspense fallback={<SkeletonLoading width="w-[24rem]" height="h-[15rem]" />}>
+        <Suspense fallback={<SkeletonLoading width="w-[23rem]" height="h-[15rem]" />}>
           <ListProduct />
         </Suspense>
       </section>
