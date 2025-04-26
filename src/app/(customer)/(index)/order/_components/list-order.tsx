@@ -15,6 +15,7 @@ import { rupiahFormat } from "@/lib/utils";
 import OrderStatusBadge from "./order-status-badge";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { SkeletonLoading } from "../../_components/sceleton-loading";
 
 type TProduct = {
   name: string;
@@ -92,7 +93,7 @@ export default function ListOrderByUser() {
         </Button>
       </div>
       {isLoading ? (
-        <div>Loading...</div>
+        <SkeletonLoading width="w-[22rem]" height="h-[8rem]" />
       ) : (
         orders.map((item) => (
           <div key={item.id} className="bg-white rounded-md ring-1 ring-[#E5E5E5] mb-2">

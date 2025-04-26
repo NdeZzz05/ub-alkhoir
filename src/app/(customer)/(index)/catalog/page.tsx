@@ -6,6 +6,7 @@ import FilterSort from "./_components/filter-sort";
 import FilterCategory from "./_components/filter-category";
 import ListProduct from "./_components/list-product";
 import ResetFilter from "./_components/reset-filter";
+import { SkeletonLoading } from "../_components/sceleton-loading";
 
 export default function CatalogPage() {
   return (
@@ -31,7 +32,7 @@ export default function CatalogPage() {
             </DialogContent>
           </Dialog>
         </div>
-        <Suspense fallback={<span>Loading...</span>}>
+        <Suspense fallback={<SkeletonLoading width="w-[24rem]" height="h-[15rem]" />}>
           <ListProduct />
         </Suspense>
       </section>
