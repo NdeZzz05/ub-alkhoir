@@ -23,7 +23,7 @@ export default function PromoCarousel({ bannerPromo }: PromoCarouselProps) {
       <div className="embla mx-auto relative" ref={emblaRef}>
         <div className="embla__container w-full">
           {bannerPromo.map((banner) => (
-            <Link key={banner.id} href={`/catalog?promo=${banner.id}`}>
+            <Link key={banner.id} href={`/catalog?promo=${banner.id}`} className="flex-[0_0_100%]">
               <Image src={banner.image_url} width={1000} height={1000} alt="promo banner" className="aspect-[21/9] border h-fit w-fit object-cover" />
             </Link>
           ))}
