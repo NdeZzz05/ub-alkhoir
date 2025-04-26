@@ -15,7 +15,7 @@ import { rupiahFormat } from "@/lib/utils";
 import OrderStatusBadge from "./order-status-badge";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { SkeletonLoading } from "../../_components/sceleton-loading";
+import { SkeletonLoading } from "../../_components/skeleton-loading";
 
 type TProduct = {
   name: string;

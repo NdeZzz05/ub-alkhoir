@@ -6,7 +6,7 @@ import FilterSort from "./_components/filter-sort";
 import FilterCategory from "./_components/filter-category";
 import ListProduct from "./_components/list-product";
 import ResetFilter from "./_components/reset-filter";
-import { SkeletonLoading } from "../_components/sceleton-loading";
+import { SkeletonLoading } from "../_components/skeleton-loading";
 
 export default function CatalogPage() {
   return (

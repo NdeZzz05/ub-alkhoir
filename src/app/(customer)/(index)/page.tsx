@@ -2,8 +2,8 @@ import { Suspense } from "react";
 import ListCategory from "./_components/list-category";
 import ListProduct from "./_components/list-product";
 import { SearchForm } from "./_components/search-form";
-import ServerPromoCarousel from "./_components/server-promo-carouel";
-import { SkeletonLoading } from "./_components/sceleton-loading";
+import ServerPromoCarousel from "./_components/server-promo-carousel";
+import { SkeletonLoading } from "./_components/skeleton-loading";
 
 export default function Page() {
   return (

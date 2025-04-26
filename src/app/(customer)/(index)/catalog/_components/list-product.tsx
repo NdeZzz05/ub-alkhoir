@@ -6,7 +6,7 @@ import CardProduct from "../../_components/card-product";
 import { TFilter, useFilter } from "@/hooks/useFilter";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { SkeletonLoading } from "../../_components/sceleton-loading";
+import { SkeletonLoading } from "../../_components/skeleton-loading";
 
 export default function ListProduct() {
   const { filter } = useFilter();
