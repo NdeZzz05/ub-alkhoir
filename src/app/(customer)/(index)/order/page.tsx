@@ -1,8 +1,15 @@
 import React from "react";
 import BackButton from "../_components/back-button";
 import ListOrderByUser from "./_components/list-order";
+import { getUser } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
-export default function OrderPage() {
+export default async function OrderPage() {
+  const { session } = await getUser();
+
+  if (!session) {
+    return redirect("/login");
+  }
   return (
     <>
       <header className="bg-gray-50 w-full p-2">
