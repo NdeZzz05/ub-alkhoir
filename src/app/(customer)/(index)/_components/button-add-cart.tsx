@@ -11,25 +11,28 @@ interface ButtonAddCartProps {
   item: TProduct;
   className?: string;
 }
+
 export default function ButtonAddCart({ item, className }: ButtonAddCartProps) {
   const { products, addProduct, increaseQuantity } = useCart();
 
+  const existingProduct = products.find((p) => p.id === item.id);
+  const isOutOfStock = item.stock <= 0;
+  const isStockLimitReached = existingProduct ? existingProduct.quantity >= item.stock : false;
+
   const addToCart = () => {
-    const existingProduct = products.find((p) => p.id === item.id);
+    if (isOutOfStock) {
+      pushAlert("Produk sedang habis stok", "warning");
+      return;
+    }
 
     if (existingProduct) {
-      if (existingProduct.quantity >= item.stock) {
+      if (isStockLimitReached) {
         pushAlert("Stok produk sudah mencapai batas maksimal", "warning");
         return;
       }
 
       increaseQuantity(item.id);
     } else {
-      if (item.stock <= 0) {
-        pushAlert("Produk sedang habis stok", "warning");
-        return;
-      }
-
       const newCart: TCart = {
         ...item,
         quantity: 1,
@@ -39,10 +42,19 @@ export default function ButtonAddCart({ item, className }: ButtonAddCartProps) {
 
     pushAlert("Berhasil menambah produk ke dalam keranjang", "success");
   };
+
   return (
-    <Button variant={"default"} className={className} onClick={addToCart} disabled={item.stock <= 0}>
-      <ShoppingBasket />
-      Keranjang
+    <Button variant="default" className={className} onClick={addToCart} disabled={isOutOfStock || isStockLimitReached}>
+      {isOutOfStock ? (
+        "Habis Terjual"
+      ) : isStockLimitReached ? (
+        "Stok Maksimal"
+      ) : (
+        <>
+          <ShoppingBasket className="mr-2 h-4 w-4" />
+          Keranjang
+        </>
+      )}
     </Button>
   );
 }
