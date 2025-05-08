@@ -51,7 +51,7 @@ export default function ButtonAddCart({ item, className }: ButtonAddCartProps) {
         "Stok Maksimal"
       ) : (
         <>
-          <ShoppingBasket className="mr-2 h-4 w-4" />
+          <ShoppingBasket className="h-4 w-4" />
           Keranjang
         </>
       )}
