@@ -47,19 +47,16 @@ export type ReportData = {
 }[];
 
 export type ExcelRow = {
-  "Id Pesanan": string;
   "Kode Pesanan": string;
   Total: string;
   "Status Pesanan": string;
   "Status Pembayaran": string;
   "Token Pembayaran": string;
-  "Id User": string;
   "Nama Pemesan": string;
   "Nomor WA Pemesan": string;
   "Alamat Pemesanan": string;
   "Metode Pembayaran": string;
   "Tipe Pesanan": string;
-  "Id Produk": string;
   "Nama Produk": string;
   Quantity: number;
   Subtotal: string;
@@ -120,19 +117,16 @@ export default function DownloadReport({ className }: React.HTMLAttributes<HTMLD
 
       item.orderProducts.forEach((product) => {
         excelData.push({
-          "Id Pesanan": item.order.id,
           "Kode Pesanan": item.order.code,
           Total: item.order.total.toString(),
           "Status Pesanan": item.order.status_order,
           "Status Pembayaran": item.order.status_payment,
           "Token Pembayaran": item.order.token_payment || "N/A",
-          "Id User": item.order.user_id,
           "Nama Pemesan": item.orderDetail?.name || "N/A",
           "Nomor WA Pemesan": item.orderDetail?.phone || "N/A",
           "Alamat Pemesanan": item.orderDetail?.address || "N/A",
           "Metode Pembayaran": item.orderDetail?.payment_method || "N/A",
           "Tipe Pesanan": item.orderDetail?.order_type || "N/A",
-          "Id Produk": product.product_id,
           "Nama Produk": product.product_name,
           Quantity: product.quantity,
           Subtotal: product.subtotal.toString(),
