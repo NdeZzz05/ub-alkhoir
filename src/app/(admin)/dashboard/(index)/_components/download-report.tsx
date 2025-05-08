@@ -10,6 +10,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import * as XLSX from "xlsx";
 import { getDownloadReport } from "../lib/data";
+import { pushAlert } from "@/lib/client";
 
 export type ReportData = {
   order: {
@@ -64,6 +65,7 @@ export type ExcelRow = {
 };
 
 export default function DownloadReport({ className }: React.HTMLAttributes<HTMLDivElement>) {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: subDays(new Date(), 7),
     to: new Date(),
@@ -71,79 +73,87 @@ export default function DownloadReport({ className }: React.HTMLAttributes<HTMLD
 
   const handleDownloadExcel = async () => {
     if (!date?.from || !date?.to) return;
+    setIsLoading(true);
 
-    const rawData = await getDownloadReport(date.from, date.to);
+    try {
+      const rawData = await getDownloadReport(date.from, date.to);
 
-    const data: ReportData = rawData.map((order) => ({
-      order: {
-        id: order.order.id,
-        code: order.order.code,
-        status_order: order.order.status_order,
-        status_payment: order.order.status_payment,
-        token_payment: order.order.token_payment,
-        total: order.order.total,
-        user_id: order.order.user_id,
-        created_at: order.order.created_at,
-        updated_at: order.order.updated_at,
-      },
-      orderDetail: order.orderDetail
-        ? {
-            id: order.orderDetail.id,
-            name: order.orderDetail.name,
-            phone: order.orderDetail.phone,
-            address: order.orderDetail.address,
-            notes: order.orderDetail.notes,
-            order_type: order.orderDetail.order_type,
-            payment_method: order.orderDetail.payment_method,
-            plot_id: order.orderDetail.plot_id,
-            created_at: order.orderDetail.created_at,
-            updated_at: order.orderDetail.updated_at,
-          }
-        : null,
-      orderProducts: order.orderProducts.map((product) => ({
-        id: product.id,
-        subtotal: product.subtotal,
-        quantity: product.quantity,
-        product_id: product.product_id,
-        created_at: product.created_at,
-        updated_at: product.updated_at,
-        product_name: product.product_name,
-      })),
-    }));
+      const data: ReportData = rawData.map((order) => ({
+        order: {
+          id: order.order.id,
+          code: order.order.code,
+          status_order: order.order.status_order,
+          status_payment: order.order.status_payment,
+          token_payment: order.order.token_payment,
+          total: order.order.total,
+          user_id: order.order.user_id,
+          created_at: order.order.created_at,
+          updated_at: order.order.updated_at,
+        },
+        orderDetail: order.orderDetail
+          ? {
+              id: order.orderDetail.id,
+              name: order.orderDetail.name,
+              phone: order.orderDetail.phone,
+              address: order.orderDetail.address,
+              notes: order.orderDetail.notes,
+              order_type: order.orderDetail.order_type,
+              payment_method: order.orderDetail.payment_method,
+              plot_id: order.orderDetail.plot_id,
+              created_at: order.orderDetail.created_at,
+              updated_at: order.orderDetail.updated_at,
+            }
+          : null,
+        orderProducts: order.orderProducts.map((product) => ({
+          id: product.id,
+          subtotal: product.subtotal,
+          quantity: product.quantity,
+          product_id: product.product_id,
+          created_at: product.created_at,
+          updated_at: product.updated_at,
+          product_name: product.product_name,
+        })),
+      }));
 
-    const excelData: ExcelRow[] = [];
-    data.forEach((item) => {
-      if (!item?.order || !item?.orderProducts) return;
+      const excelData: ExcelRow[] = [];
+      data.forEach((item) => {
+        if (!item?.order || !item?.orderProducts) return;
 
-      item.orderProducts.forEach((product) => {
-        excelData.push({
-          "Kode Pesanan": item.order.code,
-          Total: item.order.total.toString(),
-          "Status Pesanan": item.order.status_order,
-          "Status Pembayaran": item.order.status_payment,
-          "Token Pembayaran": item.order.token_payment || "N/A",
-          "Nama Pemesan": item.orderDetail?.name || "N/A",
-          "Nomor WA Pemesan": item.orderDetail?.phone || "N/A",
-          "Alamat Pemesanan": item.orderDetail?.address || "N/A",
-          "Metode Pembayaran": item.orderDetail?.payment_method || "N/A",
-          "Tipe Pesanan": item.orderDetail?.order_type || "N/A",
-          "Nama Produk": product.product_name,
-          Quantity: product.quantity,
-          Subtotal: product.subtotal.toString(),
-          "Tanggal Pesanan": item.order.created_at,
+        item.orderProducts.forEach((product) => {
+          excelData.push({
+            "Kode Pesanan": item.order.code,
+            Total: item.order.total.toString(),
+            "Status Pesanan": item.order.status_order,
+            "Status Pembayaran": item.order.status_payment,
+            "Token Pembayaran": item.order.token_payment || "N/A",
+            "Nama Pemesan": item.orderDetail?.name || "N/A",
+            "Nomor WA Pemesan": item.orderDetail?.phone || "N/A",
+            "Alamat Pemesanan": item.orderDetail?.address || "N/A",
+            "Metode Pembayaran": item.orderDetail?.payment_method || "N/A",
+            "Tipe Pesanan": item.orderDetail?.order_type || "N/A",
+            "Nama Produk": product.product_name,
+            Quantity: product.quantity,
+            Subtotal: product.subtotal.toString(),
+            "Tanggal Pesanan": item.order.created_at,
+          });
         });
       });
-    });
 
-    const ws = XLSX.utils.json_to_sheet(excelData);
-    const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.json_to_sheet(excelData);
+      const wb = XLSX.utils.book_new();
 
-    const fromStr = format(date.from, "dd-MM-yyyy");
-    const toStr = format(date.to, "dd-MM-yyyy");
-    const fileName = `laporan-penjualan-${fromStr}_to_${toStr}.xlsx`;
+      const fromStr = format(date.from, "dd-MM-yyyy");
+      const toStr = format(date.to, "dd-MM-yyyy");
+      const fileName = `laporan-penjualan-${fromStr}_to_${toStr}.xlsx`;
 
-    XLSX.utils.book_append_sheet(wb, ws, "Laporan Penjualan");
-    XLSX.writeFile(wb, fileName);
+      XLSX.utils.book_append_sheet(wb, ws, "Laporan Penjualan");
+      XLSX.writeFile(wb, fileName);
+    } catch (error) {
+      pushAlert("Gagal mengunduh laporan", "danger");
+      console.error("Gagal mengunduh laporan:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -172,8 +182,17 @@ export default function DownloadReport({ className }: React.HTMLAttributes<HTMLD
         </Popover>
       </div>
       <Button onClick={handleDownloadExcel} disabled={!date?.from || !date?.to}>
-        <Download className="w-4 h-4" />
-        Unduh Laporan Penjualan
+        {isLoading ? (
+          <>
+            <span className="animate-spin">⏳</span>
+            Mengunduh...
+          </>
+        ) : (
+          <>
+            <Download className="w-4 h-4" />
+            Unduh Laporan Penjualan
+          </>
+        )}
       </Button>
     </div>
   );
