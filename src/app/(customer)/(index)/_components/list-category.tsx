@@ -12,7 +12,7 @@ export default async function ListCategory() {
     <div id="categories" className="max-w-sm">
       <h2 className="font-bold text-base p-1">Kategori Produk</h2>
       <ScrollArea>
-        <div className="flex gap-4 p-1">
+        <div className="flex gap-2 py-1 px-3">
           {categories.map((item) => (
             <Link key={`${item.name + item.id}`} href={`/catalog?category=${item.id}`} className="categories-card">
               <div className="bg-white flex flex-col items-center space-y-2 rounded-md ring-1 ring-[#E5E5E5] w-20">
