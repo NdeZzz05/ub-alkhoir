@@ -5,10 +5,11 @@ import prisma from "../../../../../../lib/prisma";
 import { getUser } from "@/lib/auth";
 import { schemaOrderProduct } from "@/lib/schema";
 import { generateRandomString } from "@/lib/utils";
-import { PaymentRequestParameters, PaymentRequest } from "xendit-node/payment_request/models";
-import xenditClient from "@/lib/xendit";
+// import { PaymentRequestParameters, PaymentRequest } from "xendit-node/payment_request/models";
+// import xenditClient from "@/lib/xendit";
 import { Prisma } from "@prisma/client";
 import { sendEmailNotification } from "./resend";
+import snap from "./init-midtrans";
 
 export async function storeOrder(_: unknown, formData: FormData, total: number, products: TCart[]): Promise<ActionResult> {
   const { session, user } = await getUser();
@@ -90,39 +91,68 @@ export async function storeOrder(_: unknown, formData: FormData, total: number, 
       };
     }
 
-    const data: PaymentRequestParameters = {
-      amount: total,
-      paymentMethod: {
-        ewallet: {
-          channelProperties: {
-            successReturnUrl: process.env.NEXT_PUBLIC_REDIRECT_URL,
-          },
-          channelCode: "SHOPEEPAY",
-        },
-        reusability: "ONE_TIME_USE",
-        type: "EWALLET",
+    const parameter = {
+      transaction_details: {
+        order_id: order.code,
+        gross_amount: total,
       },
-      currency: "IDR",
-      referenceId: order.code,
+      customer_details: {
+        first_name: parse.data.name,
+        phone: parse.data.phone,
+      },
+      callbacks: {
+        finish: process.env.NEXT_PUBLIC_REDIRECT_URL,
+      },
     };
 
-    const response: PaymentRequest = await xenditClient.PaymentRequest.createPaymentRequest({ data });
-
-    const redirectPaymentURL = response.actions?.find((val) => val.urlType === "DEEPLINK")?.url ?? "/";
-    const token = new URL(redirectPaymentURL).searchParams.get("token");
+    const midtransResponse = await snap.createTransaction(parameter);
 
     await prisma.order.update({
       where: { id: order.id },
       data: {
-        token_payment: token ?? null,
+        token_payment: midtransResponse.token,
       },
     });
 
     return {
-      success: "Terima kasih! Kami sudah menerima pesanan kamu. Mohon ditunggu, ya.",
-      redirectURL: redirectPaymentURL,
+      success: "Terima kasih! Kami sudah menerima pesanan kamu. Mohon lanjut ke pembayaran.",
+      redirectURL: midtransResponse.redirect_url,
       error: "",
     };
+
+    // const data: PaymentRequestParameters = {
+    //   amount: total,
+    //   paymentMethod: {
+    //     ewallet: {
+    //       channelProperties: {
+    //         successReturnUrl: process.env.NEXT_PUBLIC_REDIRECT_URL,
+    //       },
+    //       channelCode: "SHOPEEPAY",
+    //     },
+    //     reusability: "ONE_TIME_USE",
+    //     type: "EWALLET",
+    //   },
+    //   currency: "IDR",
+    //   referenceId: order.code,
+    // };
+
+    // const response: PaymentRequest = await xenditClient.PaymentRequest.createPaymentRequest({ data });
+
+    // const redirectPaymentURL = response.actions?.find((val) => val.urlType === "DEEPLINK")?.url ?? "/";
+    // const token = new URL(redirectPaymentURL).searchParams.get("token");
+
+    // await prisma.order.update({
+    //   where: { id: order.id },
+    //   data: {
+    //     token_payment: token ?? null,
+    //   },
+    // });
+
+    // return {
+    //   success: "Terima kasih! Kami sudah menerima pesanan kamu. Mohon ditunggu, ya.",
+    //   redirectURL: redirectPaymentURL,
+    //   error: "",
+    // };
   } catch (error) {
     console.error(error);
     return {

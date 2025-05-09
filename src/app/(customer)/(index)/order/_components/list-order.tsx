@@ -126,7 +126,8 @@ export default function ListOrderByUser() {
             {item.payment_method === "transfer" && item.status_payment === "pending" && item.token_payment && (
               <div className="flex justify-end p-2">
                 <Link
-                  href={`https://ewallet-mock-connector.xendit.co/v1/ewallet_connector/checkouts?token=${item.token_payment}`}
+                  // href={`https://ewallet-mock-connector.xendit.co/v1/ewallet_connector/checkouts?token=${item.token_payment}`}
+                  href={`https://app.sandbox.midtrans.com/snap/v4/redirection/${item.token_payment}#/payment-list`}
                   target="_blank"
                   className="bg-primary text-white text-sm px-4 py-2 rounded-md hover:bg-primary/80 transition"
                 >

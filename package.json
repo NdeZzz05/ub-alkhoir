@@ -41,6 +41,7 @@
     "embla-carousel-react": "^8.5.2",
     "lucia": "^3.2.2",
     "lucide-react": "^0.475.0",
+    "midtrans-client": "^1.4.2",
     "next": "^15.3.2",
     "prisma": "^6.3.1",
     "react": "^18.3.1",
