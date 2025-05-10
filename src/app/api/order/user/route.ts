@@ -25,6 +25,9 @@ export async function POST(req: Request) {
 
     const orders = await prisma.order.findMany({
       where,
+      orderBy: {
+        created_at: "desc",
+      },
       include: {
         user: true,
         order_product: {

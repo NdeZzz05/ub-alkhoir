@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "../column";
 import { StatusOrder } from "@prisma/client";
+import Loading from "../../_components/loading";
 
 export default function ListOrder() {
   const { filter, setFilter } = useOrderFilter();
@@ -66,7 +67,7 @@ export default function ListOrder() {
         </Button>
       </div>
 
-      {isLoading ? <div>Loading...</div> : <DataTable columns={columns} data={orders} />}
+      {isLoading ? <Loading /> : <DataTable columns={columns} data={orders} />}
     </>
   );
 }

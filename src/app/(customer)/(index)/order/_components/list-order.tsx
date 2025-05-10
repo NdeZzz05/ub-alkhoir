@@ -15,7 +15,7 @@ import { rupiahFormat } from "@/lib/utils";
 import OrderStatusBadge from "./order-status-badge";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { SkeletonLoading } from "../../_components/skeleton-loading";
+import Loading from "../../_components/loading";
 
 type TProduct = {
   name: string;
@@ -93,19 +93,28 @@ export default function ListOrderByUser() {
         </Button>
       </div>
       {isLoading ? (
-        <SkeletonLoading width="w-[22rem]" height="h-[8rem]" />
+        <Loading />
+      ) : orders.length === 0 ? (
+        <div className="flex flex-col items-center justify-center text-center py-12 gap-3 text-gray-600">
+          <p className="text-lg font-semibold">Oops, belum ada pesanan ditemukan</p>
+          <p className="text-sm max-w-sm">Kamu belum melakukan pemesanan. Yuk, jelajahi produk dan mulai belanja sekarang!</p>
+          <Link href="/" className="mt-2 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition">
+            Mulai Belanja
+          </Link>
+        </div>
       ) : (
         orders.map((item) => (
-          <div key={item.id} className="bg-white rounded-md ring-1 ring-[#E5E5E5] mb-2">
-            <div className="p-2 flex justify-between items-center bg-gray-300">
+          <div key={item.id} className="bg-gray-100 rounded-md ring-1 ring-[#E5E5E5] mb-4">
+            <div className="p-2 flex justify-between items-center bg-gray-200">
               <p className="font-medium text-sm text-gray-500">#{item.code}</p>
-              <div>
+              <div className="text-end">
                 <Badge className="bg-orange-500 hover:bg-orange-600">{item.payment_method}</Badge>
+                {(item.payment_method === "transfer" || item.payment_method === "cod") && item.status_payment === "paid" && <Badge className="bg-green-500 hover:bg-green-600">Lunas</Badge>}
                 <OrderStatusBadge status_order={item.status_order} status_payment={item.status_payment} payment_method={item.payment_method} type_order={item.type_order} />
               </div>
             </div>
             {item.products.map((product) => (
-              <div key={product.name + 1} className="flex">
+              <div key={product.name + 1} className="flex ">
                 <Image key={product.name + 1} src={getImageUrl(product.image, "product")} alt={product.name} width={60} height={60} className="aspect-[1/1] h-fit w-fit object-cover rounded-t-md p-2" loading="lazy" />
                 <div className="w-full p-2">
                   <p className="font-medium text-sm">{product.name}</p>
@@ -114,7 +123,7 @@ export default function ListOrderByUser() {
                 </div>
               </div>
             ))}
-            <div className="bg-gray-100 text-sm flex justify-between p-2">
+            <div className="text-sm flex justify-between p-2 border-t border-gray-300">
               <p className="text-gray-600">
                 <span className="font-bold text-primary">{item.products.reduce((total, p) => total + p.quantity, 0)} </span>Produk
               </p>

@@ -6,20 +6,50 @@ import { Logout } from "../lib/action";
 import { ActionResult } from "@/types";
 import { Button } from "@/components/ui/button";
 import { LogOutIcon } from "lucide-react";
+import { pushAlert } from "@/lib/client";
+import { useCart } from "@/hooks/useCart";
+import { useRouter } from "next/navigation";
+import { useFormStatus } from "react-dom";
 
 const initialState: ActionResult = {
   error: "",
 };
 
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button variant={"destructive"} disabled={pending} className="w-full">
+      {pending ? (
+        "Loading..."
+      ) : (
+        <div className="font-normal flex gap-2">
+          <LogOutIcon /> Keluar
+        </div>
+      )}
+    </Button>
+  );
+}
+
 export default function FormLogout() {
-  const [, formAction] = useActionState(Logout, initialState);
+  const [state, formAction] = useActionState(Logout, initialState);
+  const clearCart = useCart((state) => state.clearCart);
+  const router = useRouter();
+
+  React.useEffect(() => {
+    if (state.error) {
+      pushAlert(state.error, "danger");
+    }
+    if (state.success && state.redirectURL) {
+      clearCart();
+      pushAlert(state.success, "success");
+      router.push(state.redirectURL);
+    }
+  }, [state, clearCart, router]);
   return (
     <>
       <form action={formAction}>
-        <Button variant={"destructive"} className="w-full">
-          <LogOutIcon />
-          <span className="font-normal ">Keluar</span>
-        </Button>
+        <SubmitButton />
       </form>
     </>
   );

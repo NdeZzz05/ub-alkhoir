@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import { SearchForm } from "../_components/search-form";
 import { ListFilter } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -6,7 +5,6 @@ import FilterSort from "./_components/filter-sort";
 import FilterCategory from "./_components/filter-category";
 import ListProduct from "./_components/list-product";
 import ResetFilter from "./_components/reset-filter";
-import { SkeletonLoading } from "../_components/skeleton-loading";
 
 export default function CatalogPage() {
   return (
@@ -32,9 +30,7 @@ export default function CatalogPage() {
             </DialogContent>
           </Dialog>
         </div>
-        <Suspense fallback={<SkeletonLoading width="w-[23rem]" height="h-[15rem]" />}>
-          <ListProduct />
-        </Suspense>
+        <ListProduct />
       </section>
     </>
   );

@@ -3,7 +3,6 @@
 import { getUser, lucia } from "@/lib/auth";
 import { ActionResult } from "@/types";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 export async function Logout(): Promise<ActionResult> {
   const { session } = await getUser();
@@ -21,5 +20,9 @@ export async function Logout(): Promise<ActionResult> {
   const cookieStore = await cookies();
   cookieStore.set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
 
-  return redirect("/login");
+  return {
+    error: "",
+    success: "Kamu sudah keluar dari akun. Jangan lupa balik lagi ya!",
+    redirectURL: "/login",
+  };
 }

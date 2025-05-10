@@ -21,7 +21,7 @@ export function FormLogout({
     emoji: string;
   };
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
-  const [state, formAction] = useActionState(Logout, initialState);
+  const [state, formAction, isPending] = useActionState(Logout, initialState);
 
   React.useEffect(() => {
     if (state.error) {
@@ -38,9 +38,15 @@ export function FormLogout({
         <SidebarMenu>
           <SidebarMenuItem>
             <form action={formAction}>
-              <SidebarMenuButton size="lg">
-                {items.emoji}
-                <span className="font-normal text-danger">{items.title}</span>
+              <SidebarMenuButton size="lg" disabled={isPending}>
+                {isPending ? (
+                  <span className="text-sm text-muted-foreground animate-pulse">🚪 Memproses keluar...</span>
+                ) : (
+                  <>
+                    {items.emoji}
+                    <span className="font-normal text-danger">{items.title}</span>
+                  </>
+                )}
               </SidebarMenuButton>
             </form>
           </SidebarMenuItem>

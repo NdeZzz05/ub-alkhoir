@@ -1,9 +1,10 @@
 import React from "react";
+import Loading from "./_components/loading";
 
 export default function loading() {
   return (
     <div className="h-screen w-full">
-      <p className="flex justify-center items-center h-full">Loading...</p>
+      <Loading />
     </div>
   );
 }

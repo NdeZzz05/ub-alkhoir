@@ -3,27 +3,23 @@ import ListCategory from "./_components/list-category";
 import ListProduct from "./_components/list-product";
 import { SearchForm } from "./_components/search-form";
 import ServerPromoCarousel from "./_components/server-promo-carousel";
-import { SkeletonLoading } from "./_components/skeleton-loading";
+import Loading from "./_components/loading";
 
 export default function Page() {
   return (
     <>
       <SearchForm />
-      <header>
-        <Suspense fallback={<SkeletonLoading width="w-[23.3rem]" height="h-[10rem]" />}>
+      <Suspense fallback={<Loading />}>
+        <header>
           <ServerPromoCarousel />
-        </Suspense>
-      </header>
-      <section id="content-category">
-        <Suspense fallback={<SkeletonLoading width="w-[23.3rem]" height="h-[4rem]" />}>
+        </header>
+        <section id="content-category">
           <ListCategory />
-        </Suspense>
-      </section>
-      <section id="content-product">
-        <Suspense fallback={<SkeletonLoading width="w-[23.3rem]" height="h-[15rem]" />}>
+        </section>
+        <section id="content-product">
           <ListProduct />
-        </Suspense>
-      </section>
+        </section>
+      </Suspense>
     </>
   );
 }
