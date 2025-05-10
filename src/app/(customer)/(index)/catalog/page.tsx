@@ -5,6 +5,7 @@ import FilterSort from "./_components/filter-sort";
 import FilterCategory from "./_components/filter-category";
 import ListProduct from "./_components/list-product";
 import ResetFilter from "./_components/reset-filter";
+import { ApplyFilterButton } from "./_components/apply-filter-button";
 
 export default function CatalogPage() {
   return (
@@ -25,7 +26,10 @@ export default function CatalogPage() {
                 <FilterSort />
                 <hr className="border-gray-200" />
                 <FilterCategory />
-                <ResetFilter />
+                <div className="flex justify-center items-center pt-2 gap-4">
+                  <ResetFilter />
+                  <ApplyFilterButton />
+                </div>
               </DialogHeader>
             </DialogContent>
           </Dialog>

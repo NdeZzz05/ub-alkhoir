@@ -20,10 +20,8 @@ export default function ResetFilter() {
     router.push("/catalog");
   };
   return (
-    <div className="pt-2">
-      <Button variant={"destructive"} onClick={handleReset} className="w-full">
-        Reset Filter
-      </Button>
-    </div>
+    <Button variant={"outline"} onClick={handleReset} className="w-full">
+      Atur Ulang
+    </Button>
   );
 }

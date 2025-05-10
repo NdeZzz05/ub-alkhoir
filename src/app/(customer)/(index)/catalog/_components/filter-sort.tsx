@@ -4,12 +4,13 @@ import { DialogTitle } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useFilter } from "@/hooks/useFilter";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+type SortBy = "priceLowest" | "priceHighest";
+
 export default function FilterSort() {
-  const { filter, setFilter } = useFilter();
-  const router = useRouter();
+  const { draft, setDraft } = useFilter();
   const searchParams = useSearchParams();
   const [sortValue, setSortValue] = useState<string>("");
 
@@ -17,18 +18,9 @@ export default function FilterSort() {
     setSortValue(searchParams.get("sortBy") || "");
   }, [searchParams]);
 
-  const handleSortChange = (sortBy: "priceLowest" | "priceHighest") => {
-    const params = new URLSearchParams(searchParams);
-
-    if (sortBy) {
-      params.set("sortBy", sortBy);
-    } else {
-      params.delete("sortBy");
-    }
-
-    setFilter({ ...filter, sortBy });
+  const handleSortChange = (sortBy: SortBy) => {
+    setDraft({ ...draft, sortBy });
     setSortValue(sortBy);
-    router.push(`/catalog?${params.toString()}`);
   };
 
   return (

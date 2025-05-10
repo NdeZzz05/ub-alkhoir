@@ -4,16 +4,17 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchProduct } from "../lib/data";
 import CardProduct from "../../_components/card-product";
 import { TFilter, useFilter } from "@/hooks/useFilter";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import Loading from "../../_components/loading";
 
 export default function ListProduct() {
   const { filter } = useFilter();
   const searchParams = useSearchParams();
-  const categoryFromUrl = searchParams.get("category");
-  const promoFromUrl = searchParams.get("promo");
   const { setFilter } = useFilter();
+  const promoFromUrl = searchParams.get("promo");
+  const categoryFromUrl = searchParams.getAll("category");
+  const initialized = useRef(false);
 
   const { data, isLoading } = useQuery({
     queryKey: ["list-product", filter],
@@ -21,15 +22,21 @@ export default function ListProduct() {
   });
 
   useEffect(() => {
+    if (initialized.current) return;
+    initialized.current = true;
+
     const newFilter: Partial<TFilter> = {};
 
-    if (categoryFromUrl) newFilter.category = [categoryFromUrl];
+    if (categoryFromUrl.length > 0) newFilter.category = categoryFromUrl;
     if (promoFromUrl) newFilter.promo = promoFromUrl;
 
     if (Object.keys(newFilter).length > 0) {
-      setFilter(newFilter);
+      setFilter({
+        ...filter,
+        ...newFilter,
+      });
     }
-  }, [categoryFromUrl, setFilter, promoFromUrl]);
+  }, []);
 
   if (isLoading)
     return (
