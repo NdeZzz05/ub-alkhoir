@@ -10,7 +10,7 @@ export default async function ListCategory() {
   const categories = await getCategories();
   return (
     <div id="categories" className="max-w-sm">
-      <h2 className="font-bold text-base p-1">Kategori Produk</h2>
+      <h2 className="font-bold text-base p-1 pl-3">Kategori Produk</h2>
       <ScrollArea>
         <div className="flex gap-2 py-1 px-3">
           {categories.map((item) => (

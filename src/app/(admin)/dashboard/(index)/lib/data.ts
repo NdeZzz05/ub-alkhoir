@@ -60,7 +60,6 @@ export async function getDownloadReport(from: Date, to: Date) {
             notes: order.order_detail.notes,
             order_type: order.order_detail.order_type,
             payment_method: order.order_detail.payment_method,
-            plot_id: order.order_detail.plot_id,
             created_at: formatISO(order.order_detail.created_at),
             updated_at: formatISO(order.order_detail.updated_at),
           }

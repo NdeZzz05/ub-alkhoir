@@ -32,7 +32,6 @@ export type ReportData = {
     notes: string | null;
     order_type: "pick_up" | "delivery";
     payment_method: "cod" | "transfer";
-    plot_id: string;
     created_at: string;
     updated_at: string;
   } | null;
@@ -99,7 +98,6 @@ export default function DownloadReport({ className }: React.HTMLAttributes<HTMLD
               notes: order.orderDetail.notes,
               order_type: order.orderDetail.order_type,
               payment_method: order.orderDetail.payment_method,
-              plot_id: order.orderDetail.plot_id,
               created_at: order.orderDetail.created_at,
               updated_at: order.orderDetail.updated_at,
             }
