@@ -64,11 +64,7 @@ export async function getOrderById(id: string) {
         id: id,
       },
       include: {
-        order_detail: {
-          include: {
-            plot: true,
-          },
-        },
+        order_detail: {},
         order_product: {
           include: {
             product: true,

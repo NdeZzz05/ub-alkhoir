@@ -4,11 +4,9 @@ import React from "react";
 import BackButton from "../_components/back-button";
 import CheckoutProduct from "./_components/checkout-product";
 import FormOrder from "./_components/form-order";
-import { getPlot } from "./lib/data";
 
 export default async function CheckoutPage() {
   const { session } = await getUser();
-  const plot = await getPlot();
 
   if (!session) {
     return redirect("/login");
@@ -21,7 +19,7 @@ export default async function CheckoutPage() {
       </header>
       <section id="" className="w-full p-3 pb-20">
         <CheckoutProduct />
-        <FormOrder plot={plot} />
+        <FormOrder />
       </section>
     </>
   );

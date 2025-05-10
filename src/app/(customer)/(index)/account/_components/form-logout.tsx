@@ -19,13 +19,13 @@ function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <Button variant={"destructive"} disabled={pending} className="w-full">
+    <Button variant={"destructive"} disabled={pending} className="w-full flex justify-center items-center gap-2">
       {pending ? (
         "Loading..."
       ) : (
-        <div className="font-normal flex gap-2">
-          <LogOutIcon /> Keluar
-        </div>
+        <>
+          <LogOutIcon size={16} /> Keluar
+        </>
       )}
     </Button>
   );

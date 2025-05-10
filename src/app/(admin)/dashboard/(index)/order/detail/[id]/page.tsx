@@ -54,7 +54,6 @@ export default async function DetailPage({ params }: TEdit) {
           <div className="space-y-1">
             <p className="font-semibold">Alamat Pengiriman</p>
             <div className="text-sm text-gray-500">
-              <p>{order?.order_detail?.plot.name}</p>
               <p> {order?.order_detail?.address}</p>
             </div>
           </div>

@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { HandCoins, Store, Truck, Wallet } from "lucide-react";
 import React, { useActionState, useEffect, useMemo, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,17 +17,6 @@ const initialFormState: ActionResult = {
   error: "",
 };
 
-type Plot = {
-  id: string;
-  name: string;
-  created_at: Date;
-  updated_at: Date;
-};
-
-type FormOrderProps = {
-  plot: Plot[];
-};
-
 function SubmitButton() {
   const { pending } = useFormStatus();
 
@@ -39,7 +27,7 @@ function SubmitButton() {
   );
 }
 
-export default function FormOrder({ plot }: FormOrderProps) {
+export default function FormOrder() {
   const { products, clearCart } = useCart();
 
   const [orderType, setOrderType] = useState<"delivery" | "pick_up">("delivery");
@@ -86,18 +74,6 @@ export default function FormOrder({ plot }: FormOrderProps) {
             <div className="flex flex-col gap-2">
               <Input name="name" placeholder="Nama pembeli" required />
               <Input name="phone" type="number" placeholder="6289531405606 (Nomor WA diawali 62)" required />
-              <Select name="plot_id" required>
-                <SelectTrigger id="category">
-                  <SelectValue placeholder="Pilih Data Kavling" />
-                </SelectTrigger>
-                <SelectContent>
-                  {plot?.map((item) => (
-                    <SelectItem key={item.id} value={`${item.id}`}>
-                      {item.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
               {orderType === "delivery" && <Textarea name="address" placeholder="Alamat rumah" required />}
               <Input name="notes" placeholder="Catatan" />
             </div>

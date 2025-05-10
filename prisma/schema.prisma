@@ -124,8 +124,6 @@ model OrderDetail {
 
   order_id        String   @unique
   order           Order   @relation(fields: [order_id], references: [id])
-  plot_id         String
-  plot            Plot @relation(fields: [plot_id], references: [id])
 
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
@@ -141,16 +139,6 @@ model OrderProduct {
   product    Product @relation(fields: [product_id], references: [id])
   order_id   String
   order      Order   @relation(fields: [order_id], references: [id])
-
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-}
-
-model Plot {
-  id        String @id @default(cuid())
-  name      String  
-
-  order_detail OrderDetail[]
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt

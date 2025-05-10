@@ -39,7 +39,7 @@ export default function ListProduct() {
     );
 
   return (
-    <div id="products" className="flex flex-col py-2">
+    <div id="products" className="flex flex-col p-2">
       <h2 className="font-bold text-base p-1">Produk</h2>
       {data?.length === 0 ? (
         <div className="w-96 flex flex-col items-center justify-center text-center py-10 gap-2 text-gray-600 ">
