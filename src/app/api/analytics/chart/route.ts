@@ -14,28 +14,23 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const range = req.nextUrl.searchParams.get("range") || "30d";
+  const fromStr = req.nextUrl.searchParams.get("from");
+  const toStr = req.nextUrl.searchParams.get("to");
 
-  let days = 30;
-  if (range === "30d") days = 30;
-  if (range === "7d") days = 7;
-
-  const today = new Date();
-  const startDate = new Date(today);
-  startDate.setDate(today.getDate() - days);
+  const from = fromStr ? new Date(fromStr) : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  const to = toStr ? new Date(toStr) : new Date();
 
   try {
     const result = await prisma.$queryRaw`
-    SELECT 
-      DATE("created_at") as date,
-      SUM(total) as total
-    FROM "Order"
-    WHERE "created_at" >= ${startDate}
-    GROUP BY DATE("created_at")
-    ORDER BY DATE("created_at") ASC
-  `;
+      SELECT 
+        DATE("created_at") as date,
+        SUM(total) as total
+      FROM "Order"
+      WHERE "created_at" BETWEEN ${from} AND ${to}
+      GROUP BY DATE("created_at")
+      ORDER BY DATE("created_at") ASC
+    `;
 
-    // Convert BigInt (PostgreSQL SUM result) ke number biasa (biar gak error di frontend)
     const formatted = (result as SalesData[]).map((item) => ({
       date: item.date.toISOString().split("T")[0],
       total: Number(item.total),

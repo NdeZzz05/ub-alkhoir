@@ -15,7 +15,7 @@ export function rupiahFormat(value: number) {
   }).format(value);
 }
 
-export function dateFormat(date: Date | null, format = "DD MMMMM YYYY") {
+export function dateFormat(date: Date | string | null, format = "dddd, DD MMM YYYY HH:mm") {
   if (!date) {
     return dayjs().format(format);
   }

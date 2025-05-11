@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { getImageUrl } from "@/lib/supabase";
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { rupiahFormat } from "@/lib/utils";
+import { dateFormat, rupiahFormat } from "@/lib/utils";
 
 export default async function DetailPage({ params }: TEdit) {
   const { id } = await Promise.resolve(params);
@@ -44,18 +44,24 @@ export default async function DetailPage({ params }: TEdit) {
         {/*  */}
         <div className="border w-full xl:w-1/2 p-4 rounded-md shadow-md flex flex-col gap-2">
           <p className="font-bold text-gray-500">#{order?.code}</p>
+
           <div className="space-y-1">
             <p className="font-semibold">Tipe Orderan</p>
             <div className="text-sm text-gray-500 space-x-1">
-              <Badge>{order?.order_detail?.order_type}</Badge>
               <Badge className="bg-orange-500">{order?.order_detail?.payment_method}</Badge>
+              {(order?.order_detail?.payment_method === "transfer" || order?.order_detail?.payment_method === "cod") && order.status_payment === "paid" && <Badge className="bg-green-500 hover:bg-green-600">Lunas</Badge>}
+              <Badge className={order?.order_detail?.order_type === "pick_up" ? "bg-yellow-500 text-white text-xs hover:bg-yellow-600" : "bg-blue-500 text-white text-xs hover:bg-blue-600"}>{order?.order_detail?.order_type}</Badge>
             </div>
           </div>
           <div className="space-y-1">
             <p className="font-semibold">Alamat Pengiriman</p>
             <div className="text-sm text-gray-500">
-              <p> {order?.order_detail?.address}</p>
+              <p>{order?.order_detail?.address ? order?.order_detail?.address : "-"}</p>
             </div>
+          </div>
+          <div>
+            <p className="font-semibold">Pesanan Masuk</p>
+            <p className="text-sm text-gray-500">{dateFormat(order?.created_at ?? null)}</p>
           </div>
         </div>
         {/*  */}

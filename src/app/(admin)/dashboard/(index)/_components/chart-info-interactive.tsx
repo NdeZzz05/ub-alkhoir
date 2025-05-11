@@ -3,13 +3,16 @@
 import * as React from "react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-import { useIsMobile } from "@/hooks/use-mobile";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useQuery } from "@tanstack/react-query";
 import { fetchOrderChart } from "../lib/client-action";
+
+import { DateRange } from "react-day-picker";
+
+type ChartInfoInteractiveProps = {
+  date?: DateRange;
+};
 
 const chartConfig = {
   visitors: {
@@ -21,49 +24,21 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function ChartInfoInteractive() {
-  const isMobile = useIsMobile();
-  const [timeRange, setTimeRange] = React.useState("30d");
+export function ChartInfoInteractive({ date }: ChartInfoInteractiveProps) {
+  const from = date?.from;
+  const to = date?.to;
 
   const { data: chartData } = useQuery({
-    queryKey: ["analytics", timeRange],
-    queryFn: () => fetchOrderChart(timeRange),
+    queryKey: ["analytics", from, to],
+    queryFn: () => fetchOrderChart(from, to),
   });
 
-  React.useEffect(() => {
-    if (isMobile) {
-      setTimeRange("7d");
-    }
-  }, [isMobile]);
+  console.log(chartData, "data chart");
 
   return (
     <Card className="@container/card">
       <CardHeader className="relative">
         <CardTitle>Total Penjualan</CardTitle>
-
-        <div className="absolute right-4 top-4">
-          <ToggleGroup type="single" value={timeRange} onValueChange={setTimeRange} variant="outline" className="@[767px]/card:flex hidden">
-            <ToggleGroupItem value="30d" className="h-8 px-2.5">
-              30 Hari Terakhir
-            </ToggleGroupItem>
-            <ToggleGroupItem value="7d" className="h-8 px-2.5">
-              7 Hari Terakhir
-            </ToggleGroupItem>
-          </ToggleGroup>
-          <Select value={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger className="@[767px]/card:hidden flex w-40" aria-label="Select a value">
-              <SelectValue placeholder="Last 3 months" />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl">
-              <SelectItem value="30d" className="rounded-lg">
-                30 Hari Terakhir
-              </SelectItem>
-              <SelectItem value="7d" className="rounded-lg">
-                7 Hari Terakhir
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
         <ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-full">

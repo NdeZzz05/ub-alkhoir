@@ -1,16 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { format, subDays } from "date-fns";
-import { CalendarIcon, Download } from "lucide-react";
+import { format } from "date-fns";
+import { Download } from "lucide-react";
 import { DateRange } from "react-day-picker";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import * as XLSX from "xlsx";
 import { getDownloadReport } from "../lib/data";
 import { pushAlert } from "@/lib/client";
+import { dateFormat } from "@/lib/utils";
 
 export type ReportData = {
   order: {
@@ -59,16 +57,17 @@ export type ExcelRow = {
   "Tipe Pesanan": string;
   "Nama Produk": string;
   Quantity: number;
-  Subtotal: string;
+  "Harga Perproduk": string;
+  Subtotal: number;
   "Tanggal Pesanan": string;
 };
 
-export default function DownloadReport({ className }: React.HTMLAttributes<HTMLDivElement>) {
+type DownloadReportProps = {
+  date: DateRange | undefined;
+};
+
+export default function DownloadReport({ date }: DownloadReportProps) {
   const [isLoading, setIsLoading] = React.useState(false);
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: subDays(new Date(), 7),
-    to: new Date(),
-  });
 
   const handleDownloadExcel = async () => {
     if (!date?.from || !date?.to) return;
@@ -118,6 +117,9 @@ export default function DownloadReport({ className }: React.HTMLAttributes<HTMLD
         if (!item?.order || !item?.orderProducts) return;
 
         item.orderProducts.forEach((product) => {
+          const subtotalPerItem = Number(product.subtotal);
+          const totalSubtotal = product.quantity * subtotalPerItem;
+
           excelData.push({
             "Kode Pesanan": item.order.code,
             Total: item.order.total.toString(),
@@ -131,8 +133,9 @@ export default function DownloadReport({ className }: React.HTMLAttributes<HTMLD
             "Tipe Pesanan": item.orderDetail?.order_type || "N/A",
             "Nama Produk": product.product_name,
             Quantity: product.quantity,
-            Subtotal: product.subtotal.toString(),
-            "Tanggal Pesanan": item.order.created_at,
+            "Harga Perproduk": product.subtotal.toString(),
+            Subtotal: totalSubtotal,
+            "Tanggal Pesanan": dateFormat(item.order.created_at),
           });
         });
       });
@@ -155,43 +158,18 @@ export default function DownloadReport({ className }: React.HTMLAttributes<HTMLD
   };
 
   return (
-    <div className="flex gap-2 mx-6 justify-end">
-      <div className={cn("grid gap-2", className)}>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button id="date" variant="outline" className={cn("w-[300px] justify-start text-left font-normal", !date && "text-muted-foreground")}>
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {date?.from ? (
-                date.to ? (
-                  <>
-                    {format(date.from, "LLL dd, y")} - {format(date.to, "LLL dd, y")}
-                  </>
-                ) : (
-                  format(date.from, "LLL dd, y")
-                )
-              ) : (
-                <span>Pilih Tanggal</span>
-              )}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar initialFocus mode="range" defaultMonth={date?.from} selected={date} onSelect={setDate} numberOfMonths={2} fromDate={new Date(2025, 3, 1)} toDate={new Date()} />
-          </PopoverContent>
-        </Popover>
-      </div>
-      <Button onClick={handleDownloadExcel} disabled={!date?.from || !date?.to}>
-        {isLoading ? (
-          <>
-            <span className="animate-spin">⏳</span>
-            Mengunduh...
-          </>
-        ) : (
-          <>
-            <Download className="w-4 h-4" />
-            Unduh Laporan Penjualan
-          </>
-        )}
-      </Button>
-    </div>
+    <Button onClick={handleDownloadExcel} disabled={!date?.from || !date?.to}>
+      {isLoading ? (
+        <>
+          <span className="animate-spin">⏳</span>
+          Mengunduh...
+        </>
+      ) : (
+        <>
+          <Download className="w-4 h-4" />
+          Unduh Laporan Penjualan
+        </>
+      )}
+    </Button>
   );
 }

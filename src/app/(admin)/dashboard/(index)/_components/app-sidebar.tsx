@@ -44,6 +44,17 @@ const data = {
       ],
     },
     {
+      title: "Data",
+      url: "/datacenter",
+      items: [
+        {
+          title: "Laporan Penjualan",
+          url: "/dashboard/datacenter",
+          emoji: "💸",
+        },
+      ],
+    },
+    {
       title: "Pelanggan",
       url: "/dashboard",
       items: [

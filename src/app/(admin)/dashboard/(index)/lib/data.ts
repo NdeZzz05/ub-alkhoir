@@ -29,6 +29,9 @@ export async function getDownloadReport(from: Date, to: Date) {
           lte: to,
         },
       },
+      orderBy: {
+        created_at: "asc",
+      },
       include: {
         order_detail: true,
         order_product: {
