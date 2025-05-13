@@ -18,33 +18,57 @@ type DashboardChartData = {
 };
 
 const renderChangeBadge = (change: number) => {
-  const isPositive = change >= 0;
+  const isPositive = change > 0;
+  const isNegative = change < 0;
+
+  const formattedChange = `${isPositive ? "+" : ""}${change.toFixed(1)}%`;
+
+  let colorClass = "";
+  let Icon = null;
+
+  if (isPositive) {
+    colorClass = "text-green-600 border-green-600";
+    Icon = TrendingUpIcon;
+  } else if (isNegative) {
+    colorClass = "text-red-600 border-red-600";
+    Icon = TrendingDownIcon;
+  } else {
+    colorClass = "text-gray-500 border-gray-500";
+  }
+
   return (
-    <Badge variant="outline" className={`flex gap-1 rounded-lg text-xs ${isPositive ? "text-green-600 border-green-600" : "text-red-600 border-red-600"}`}>
-      {isPositive ? (
-        <>
-          <TrendingUpIcon className="size-3" />+{change}%
-        </>
-      ) : (
-        <>
-          <TrendingDownIcon className="size-3" />
-          {change}%
-        </>
-      )}
+    <Badge variant="outline" className={`flex gap-1 rounded-lg text-xs ${colorClass}`}>
+      {Icon && <Icon className="size-3" />}
+      {formattedChange}
     </Badge>
   );
 };
 
 const renderFooterInfo = (change: number, type: string) => {
-  const isPositive = change >= 0;
-  const colorClass = isPositive ? "text-green-600" : "text-red-600";
-  const Icon = isPositive ? TrendingUpIcon : TrendingDownIcon;
-  const message = isPositive ? `${type} meningkat periode ini` : `${type} menurun periode ini`;
+  const isPositive = change > 0;
+  const isNegative = change < 0;
+
+  let colorClass = "";
+  let message = "";
+  let Icon = null;
+
+  if (isPositive) {
+    colorClass = "text-green-600";
+    Icon = TrendingUpIcon;
+    message = `${type} meningkat periode ini`;
+  } else if (isNegative) {
+    colorClass = "text-red-600";
+    Icon = TrendingDownIcon;
+    message = `${type} menurun periode ini`;
+  } else {
+    colorClass = "text-gray-500";
+    message = `${type} stabil periode ini`;
+  }
 
   return (
     <>
       <div className={`line-clamp-1 flex gap-2 font-medium ${colorClass}`}>
-        {message} <Icon className="size-4" />
+        {message} {Icon && <Icon className="size-4" />}
       </div>
       <div className="text-muted-foreground">Dibandingkan dengan 1 bulan terakhir</div>
     </>

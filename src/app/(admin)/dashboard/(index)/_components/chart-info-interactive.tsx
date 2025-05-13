@@ -33,8 +33,6 @@ export function ChartInfoInteractive({ date }: ChartInfoInteractiveProps) {
     queryFn: () => fetchOrderChart(from, to),
   });
 
-  console.log(chartData, "data chart");
-
   return (
     <Card className="@container/card">
       <CardHeader className="relative">
